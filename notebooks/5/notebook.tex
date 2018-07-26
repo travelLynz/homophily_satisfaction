@@ -1,0 +1,1622 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{interrater\_sentiment\_analysis\_test}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \section{Sentiment Analysis test}\label{sentiment-analysis-test}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}144}]:} \PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} autoreload
+          \PY{o}{\PYZpc{}}\PY{k}{autoreload} 2
+          \PY{k+kn}{import} \PY{n+nn}{sys}
+          \PY{k+kn}{import} \PY{n+nn}{os}
+          \PY{k+kn}{import} \PY{n+nn}{glob}
+          \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+          \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+          \PY{k+kn}{from} \PY{n+nn}{collections} \PY{k}{import} \PY{n}{defaultdict}
+          \PY{n}{sys}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../../Code}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+          \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+          \PY{k+kn}{import} \PY{n+nn}{opinion\PYZus{}lexicon} \PY{k}{as} \PY{n+nn}{op}
+          \PY{k+kn}{import} \PY{n+nn}{afinns} \PY{k}{as} \PY{n+nn}{af}
+          \PY{k+kn}{import} \PY{n+nn}{vader}
+          \PY{k+kn}{import} \PY{n+nn}{s140}
+          \PY{k+kn}{import} \PY{n+nn}{so\PYZus{}cal} \PY{k}{as} \PY{n+nn}{sc}
+          \PY{k+kn}{import} \PY{n+nn}{utils}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The autoreload extension is already loaded. To reload it, use:
+  \%reload\_ext autoreload
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}205}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{options}\PY{o}{.}\PY{n}{display}\PY{o}{.}\PY{n}{max\PYZus{}colwidth} \PY{o}{=} \PY{l+m+mi}{600}
+\end{Verbatim}
+
+
+    \subsection{Load Data with overall scores from
+tools}\label{load-data-with-overall-scores-from-tools}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}206}]:} \PY{n}{reviews} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater\PYZus{}uq.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}207}]:} \PY{n+nb}{len}\PY{p}{(}\PY{n}{reviews}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}207}]:} 70
+\end{Verbatim}
+            
+    \section{Afinn - overall}\label{afinn---overall}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}211}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{af}\PY{o}{.}\PY{n}{get\PYZus{}score}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsection{Vader - Overall}\label{vader---overall}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}213}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{vader}\PY{o}{.}\PY{n}{get\PYZus{}score}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \section{S140}\label{s140}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}232}]:} \PY{n}{reviews} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{s140}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}217}]:} \PY{n}{s140}\PY{o}{.}\PY{n}{save\PYZus{}review\PYZus{}s140}\PY{p}{(}\PY{n}{reviews}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{reviews}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}233}]:} \PY{n}{s140\PYZus{}dir} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{s140/overall/out/}\PY{l+s+s2}{\PYZdq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}234}]:} \PY{n}{reviews} \PY{o}{=} \PY{n}{s140}\PY{o}{.}\PY{n}{read\PYZus{}s140\PYZus{}scores}\PY{p}{(}\PY{n}{s140\PYZus{}dir}\PY{p}{,} \PY{n}{reviews}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+70 Index(['string'], dtype='object')
+
+    \end{Verbatim}
+
+    \section{SO-CAL}\label{so-cal}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}239}]:} \PY{n}{sc}\PY{o}{.}\PY{n}{save\PYZus{}review\PYZus{}so\PYZus{}cal}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{comments}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}245}]:} \PY{n}{reviews} \PY{o}{=} \PY{n}{sc}\PY{o}{.}\PY{n}{get\PYZus{}overall\PYZus{}sent}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal/overall/out/file\PYZus{}sentiment.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{reviews}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsection{Add opinion Lexicon
+Scores}\label{add-opinion-lexicon-scores}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}246}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}bow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{op}\PY{o}{.}\PY{n}{get\PYZus{}score}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}247}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}freq}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{op}\PY{o}{.}\PY{n}{get\PYZus{}score}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{freq}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}248}]:} \PY{n}{reviews}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}248}]:}         idReview        id        date  reviewer\_id  listing\_id  recipient\_id  \textbackslash{}
+          23431      48073  26771065  18/02/2015      9497078      195123        940724   
+          114008    231496  13506790  29/05/2014     13304632     2140284      10896934   
+          
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 comments  \textbackslash{}
+          23431   The room was a good size. However it didn't seem that the sheets were clean since I found long female hair in the bed. Also I had an evening appointment and Susan told me that she lost her extra key so she couldn't provide me with my own key. And she would like me to not come home too late since she would have to wait up for me to return so she could let me into the building and the apartment. And if I wanted to come home after 11 pm she wanted me to call her to let her know. And she would prefer that I didn't come home later than 12. It really felt like a curfew and it was annoying since {\ldots}   
+          114008  Me and my party have mixed feelings on our stay with Noa. I'll start with the positives: Noa is a great host. He gave us a warm welcome and a nice intro. to the area, transport etc. He even contacted me mid-stay with more suggestions on what to do. Noa also provided 2 sets of keys and was very flexible with check out times - much appreciated! We were provided with clean bedding and towels upon arrival and the fridge was stocked with a few complimentary drinks. The location of the flat is fantastic. A 1 minute walk to the bus stops (in and out of downtown) and a 4 minute walk to the subway{\ldots}   
+          
+                  interrater\_weighted\_avg  num\_of\_raters  len  num\_of\_sents  afinn  \textbackslash{}
+          23431                      1.63              8  240            10    4.0   
+          114008                     2.13              8  361            27   36.0   
+          
+                   vader    so\_cal  s140  opinion\_bow  opinion\_freq  
+          23431   0.7921 -0.466667     0     0.014493      0.012552  
+          114008  0.9783  0.439216     0     0.085714      0.038889  
+\end{Verbatim}
+            
+    \subsubsection{AFINN-Sentence Level}\label{afinn-sentence-level}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}249}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Affin\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{af}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}level\PYZus{}sent}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsubsection{Vader sentence Level}\label{vader-sentence-level}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}250}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vader\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{vader}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}level\PYZus{}sent}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsubsection{Sentiment-140 sentence
+Level}\label{sentiment-140-sentence-level}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}253}]:} \PY{n}{s140}\PY{o}{.}\PY{n}{save\PYZus{}review\PYZus{}sentence\PYZus{}short}\PY{p}{(}\PY{n}{reviews}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{reviews\PYZus{}uq}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}254}]:} \PY{n}{s140\PYZus{}dir} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140/sent/out/}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}255}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{s140}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}level\PYZus{}sent}\PY{p}{(}\PY{n}{s140\PYZus{}dir}\PY{p}{,} \PY{n}{reviews}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsubsection{SO\_CAL sentence level}\label{so_cal-sentence-level}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}256}]:} \PY{n}{sc}\PY{o}{.}\PY{n}{save\PYZus{}review\PYZus{}sentence}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{comments}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}257}]:} \PY{n}{so\PYZus{}cal\PYZus{}dir} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal/sent/out/file\PYZus{}sentiment.csv}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}262}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{sc}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}level\PYZus{}sent}\PY{p}{(}\PY{n}{so\PYZus{}cal\PYZus{}dir}\PY{p}{,} \PY{n}{reviews}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsubsection{Opinion Lexion BOW Sentence
+Level}\label{opinion-lexion-bow-sentence-level}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}264}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}bow\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{op}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}level\PYZus{}sent}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsubsection{Opinion Lexion Freq Sentence
+Level}\label{opinion-lexion-freq-sentence-level}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}265}]:} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}freq\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{o}{.}\PY{n}{comments}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{op}\PY{o}{.}\PY{n}{get\PYZus{}sentence\PYZus{}level\PYZus{}sent}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{freq}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsection{Normalise Scores}\label{normalise-scores}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}266}]:} \PY{n}{summary\PYZus{}table} \PY{o}{=} \PY{n}{reviews}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{idReview}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{comments}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}267}]:} \PY{n}{summary\PYZus{}table}\PY{o}{.}\PY{n}{is\PYZus{}copy} \PY{o}{=} \PY{k+kc}{False}
+          \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reviews}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater\PYZus{}weighted\PYZus{}avg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{/}\PY{l+m+mi}{5}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}268}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}269}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}270}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}271}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}272}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}bow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}273}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}freq}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \section{Normalise and average out sentence level
+scores}\label{normalise-and-average-out-sentence-level-scores}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}274}]:} \PY{k}{def} \PY{n+nf}{reduce\PYZus{}to\PYZus{}average}\PY{p}{(}\PY{n}{col}\PY{p}{)}\PY{p}{:}
+              \PY{n}{vals} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+              \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{col}\PY{p}{:}
+                  \PY{n}{reduced} \PY{o}{=} \PY{p}{[}\PY{n}{v} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{utils}\PY{o}{.}\PY{n}{to\PYZus{}float}\PY{p}{(}\PY{n}{i}\PY{p}{)} \PY{k}{if} \PY{n}{v} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mf}{4.75} \PY{o+ow}{or} \PY{n}{v} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mf}{5.25}\PY{p}{]}
+                  \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n+nb}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{average}\PY{p}{(}\PY{n}{reduced}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.3f}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+              \PY{k}{return} \PY{n}{vals}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}275}]:} \PY{n}{sentence\PYZus{}table} \PY{o}{=} \PY{n}{reviews}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{idReview}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{comments}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}276}]:} \PY{n}{sentence\PYZus{}table}\PY{o}{.}\PY{n}{is\PYZus{}copy} \PY{o}{=} \PY{k+kc}{False}
+          \PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale\PYZus{}sent}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Affin\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}277}]:} \PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale\PYZus{}sent}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vader\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}278}]:} \PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale\PYZus{}sent}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}279}]:} \PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale\PYZus{}sent}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}305}]:} \PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale\PYZus{}sent}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}bow\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}281}]:} \PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{minmaxscale\PYZus{}sent}\PY{p}{(}\PY{n}{reviews}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opinion\PYZus{}freq\PYZhy{}sentence}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}282}]:} \PY{n}{sentence\PYZus{}table}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}282}]:}        idReview        id  \textbackslash{}
+          23431     48073  26771065   
+          
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                comments  \textbackslash{}
+          23431  The room was a good size. However it didn't seem that the sheets were clean since I found long female hair in the bed. Also I had an evening appointment and Susan told me that she lost her extra key so she couldn't provide me with my own key. And she would like me to not come home too late since she would have to wait up for me to return so she could let me into the building and the apartment. And if I wanted to come home after 11 pm she wanted me to call her to let her know. And she would prefer that I didn't come home later than 12. It really felt like a curfew and it was annoying since {\ldots}   
+          
+                                                                                afinn\_s  \textbackslash{}
+          23431  [0.379, 0.345, 0.172, 0.345, 0.276, 0.276, 0.207, 0.276, 0.241, 0.379]   
+          
+                                                                                vader\_s  \textbackslash{}
+          23431  [0.700, 0.679, 0.286, 0.657, 0.460, 0.460, 0.249, 0.240, 0.789, 0.249]   
+          
+                                                                               so\_cal\_s  \textbackslash{}
+          23431  [0.720, 0.600, 0.560, 0.480, 0.600, 0.600, 0.480, 0.560, 0.680, 0.600]   
+          
+                                                                                                                                                       s140\_s  \textbackslash{}
+          23431  [0.500, 0.500, 0.500, 0.500, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.500, 0.500, 0.000, 0.000, 0.500, 0.500, 0.500, 0.500, 0.500, 0.500]   
+          
+                                                                               op\_box\_s  \textbackslash{}
+          23431  [0.667, 0.550, 0.444, 0.542, 0.500, 0.583, 0.464, 0.455, 0.531, 0.750]   
+          
+                                                                              op\_freq\_s  
+          23431  [0.667, 0.603, 0.549, 0.589, 0.571, 0.619, 0.558, 0.550, 0.584, 0.635]  
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}283}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reduce\PYZus{}to\PYZus{}average}\PY{p}{(}\PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}284}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reduce\PYZus{}to\PYZus{}average}\PY{p}{(}\PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}285}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reduce\PYZus{}to\PYZus{}average}\PY{p}{(}\PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}286}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reduce\PYZus{}to\PYZus{}average}\PY{p}{(}\PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}306}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reduce\PYZus{}to\PYZus{}average}\PY{p}{(}\PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}288}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{reduce\PYZus{}to\PYZus{}average}\PY{p}{(}\PY{n}{sentence\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}294}]:} \PY{n}{summary\PYZus{}table}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}294}]:}         idReview        id  \textbackslash{}
+          23431      48073  26771065   
+          114008    231496  13506790   
+          115123    234538  58239138   
+          163454    342257  49807970   
+          175135    365577  74515089   
+          
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 comments  \textbackslash{}
+          23431   The room was a good size. However it didn't seem that the sheets were clean since I found long female hair in the bed. Also I had an evening appointment and Susan told me that she lost her extra key so she couldn't provide me with my own key. And she would like me to not come home too late since she would have to wait up for me to return so she could let me into the building and the apartment. And if I wanted to come home after 11 pm she wanted me to call her to let her know. And she would prefer that I didn't come home later than 12. It really felt like a curfew and it was annoying since {\ldots}   
+          114008  Me and my party have mixed feelings on our stay with Noa. I'll start with the positives: Noa is a great host. He gave us a warm welcome and a nice intro. to the area, transport etc. He even contacted me mid-stay with more suggestions on what to do. Noa also provided 2 sets of keys and was very flexible with check out times - much appreciated! We were provided with clean bedding and towels upon arrival and the fridge was stocked with a few complimentary drinks. The location of the flat is fantastic. A 1 minute walk to the bus stops (in and out of downtown) and a 4 minute walk to the subway{\ldots}   
+          115123  Ari was awesome we were so fortunate to book his place last minute in NYC on New Years eve! My partner and I had booked a different airbnb for the evening previously but unfortunately the host had a change of plans and had to cancel on us. In a mad scramble I found Ari's place and it was everything we could have hoped for and more.   The apartment itself was clean, modern and warm, huge by New York standards. We only met Ari for a minute on his way out, he handed us the keys and gave us a quick overview.  While we were out for most of the day and evening, when we got back the apartment bui{\ldots}   
+          163454  Catia's small studio is lovely, well-decorated and she's done a great job organizing it, which is important since it's a small space. It was fine for two of us (my wife and I). The only slight issue is that there's really not much of a place to put clothing that doesn't hang -- we had to use the couch for that purpose. She has a well-functioning kitchen and a Nespresso machine and milk steamer which quickly makes nice shots. The small stove works nicely. The location is convenient, just a couple of blocks from Penn Station with easy access to subway lines. She has TV and a Roku box so when{\ldots}   
+          175135                                                                        Sasha was kind enough to pick us up at the subway station and walked with us to his apartment. A very kind and hospitable man. We stayed there for four nights and didn't see him and his wife much during our stay because we were in town most of the time. The apartment was okay, but not very clean. The dog was well-behaved and playful, but his hairs were all-over. The location is very good! Nice safe neighborhood, lots of restaurants nearby, super close to the subway and 2 blocks to central park. The price was decent as well.   
+          
+                  interrater   afinn\_o   vader\_o  so\_cal\_o  s140\_o  op\_bow\_o  op\_freq\_o  \textbackslash{}
+          23431        0.326  0.255319  0.889406  0.300218     0.0  0.296236   0.372115   
+          114008       0.426  0.936170  0.990103  0.404639     0.0  0.457096   0.473396   
+          115123       0.950  0.468085  0.991672  0.592008     0.0  0.480080   0.479447   
+          163454       0.750  0.574468  0.988643  0.482088     1.0  0.591363   0.641904   
+          175135       0.600  0.531915  0.989833  0.549969     0.0  0.788757   0.742676   
+          
+                 afinn\_s vader\_s s140\_s so\_cal\_s op\_box\_s op\_freq\_s  
+          23431    0.290   0.477  0.300    0.588    0.549     0.592  
+          114008   0.322   0.578  0.519    0.604    0.549     0.590  
+          115123   0.329   0.614  0.444    0.680    0.570     0.613  
+          163454   0.358   0.661  0.500    0.635    0.611     0.644  
+          175135   0.349   0.635  0.562    0.670    0.661     0.657  
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}291}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}
+\end{Verbatim}
+
+
+    \section{Calculate Error}\label{calculate-error}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}292}]:} \PY{k}{def} \PY{n+nf}{rss}\PY{p}{(}\PY{n}{tbl}\PY{p}{,} \PY{n}{c1}\PY{p}{,} \PY{n}{c2}\PY{p}{)}\PY{p}{:}
+              \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{[}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{c1}\PY{p}{]}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n+nb}{float}\PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{c2}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{r} \PY{o+ow}{in} \PY{n}{tbl}\PY{o}{.}\PY{n}{iterrows}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}307}]:} \PY{k}{for} \PY{n}{a} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error for }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{ : }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{a}\PY{p}{,} \PY{n}{rss}\PY{p}{(}\PY{n}{summary\PYZus{}table}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{a}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Error for afinn\_o : 7.88
+Error for vader\_o : 5.55
+Error for so\_cal\_o : 5.75
+Error for s140\_o : 11.33
+Error for op\_bow\_o : 6.32
+Error for op\_freq\_o : 5.21
+Error for afinn\_s : 14.11
+Error for vader\_s : 2.88
+Error for s140\_s : 7.33
+Error for so\_cal\_s : 3.59
+Error for op\_bow\_s : 5.28
+Error for op\_freq\_s : 4.57
+
+    \end{Verbatim}
+
+    \section{Split into Levels for further
+evaluation}\label{split-into-levels-for-further-evaluation}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}295}]:} \PY{k}{def} \PY{n+nf}{split\PYZus{}into\PYZus{}levels}\PY{p}{(}\PY{n}{in\PYZus{}tbl}\PY{p}{,} \PY{n}{out\PYZus{}tbl}\PY{p}{,} \PY{n}{col}\PY{p}{,} \PY{n+nb}{type}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+              \PY{n}{vals} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+              \PY{n}{out\PYZus{}tbl}\PY{o}{.}\PY{n}{is\PYZus{}copy} \PY{o}{=} \PY{k+kc}{False}
+              \PY{k}{if} \PY{n+nb}{type} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+                  \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{r} \PY{o+ow}{in} \PY{n}{in\PYZus{}tbl}\PY{o}{.}\PY{n}{iterrows}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                      \PY{k}{if} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.2} \PY{o+ow}{and} \PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.4}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.4} \PY{o+ow}{and} \PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.6} \PY{o+ow}{and} \PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.8}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.8}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}
+              \PY{k}{elif} \PY{n+nb}{type} \PY{o}{==} \PY{l+m+mi}{2}\PY{p}{:}
+                  \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{r} \PY{o+ow}{in} \PY{n}{in\PYZus{}tbl}\PY{o}{.}\PY{n}{iterrows}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                      \PY{k}{if} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.35}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.35} \PY{o+ow}{and} \PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.65}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.65}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{vals}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+              \PY{k}{else}\PY{p}{:}
+                  \PY{k}{return} \PY{n}{none}
+              \PY{n}{out\PYZus{}tbl}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sat\PYZus{}level\PYZus{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{vals}
+              \PY{k}{return} \PY{n}{out\PYZus{}tbl}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}296}]:} \PY{k}{def} \PY{n+nf}{build\PYZus{}levels\PYZus{}table}\PY{p}{(}\PY{n}{tbl}\PY{p}{,} \PY{n}{tools}\PY{p}{,} \PY{n+nb}{type}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+              \PY{n}{levels\PYZus{}tbl} \PY{o}{=} \PY{n}{tbl}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{comments}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+              \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{tools}\PY{p}{:}
+                  \PY{n}{levels\PYZus{}tbl} \PY{o}{=} \PY{n}{split\PYZus{}into\PYZus{}levels}\PY{p}{(}\PY{n}{tbl}\PY{p}{,} \PY{n}{levels\PYZus{}tbl}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n+nb}{type}\PY{p}{)}
+              \PY{k}{return} \PY{n}{levels\PYZus{}tbl}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}297}]:} \PY{n}{overall\PYZus{}tools} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+          \PY{n}{sentence\PYZus{}tools} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{interrater}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{afinn\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vader\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{so\PYZus{}cal\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s140\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}bow\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{op\PYZus{}freq\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}301}]:} \PY{n}{overall\PYZus{}lvl\PYZus{}tbl} \PY{o}{=} \PY{n}{build\PYZus{}levels\PYZus{}table}\PY{p}{(}\PY{n}{summary\PYZus{}table}\PY{p}{,} \PY{n}{overall\PYZus{}tools}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}302}]:} \PY{n}{overall\PYZus{}lvl\PYZus{}tbl}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}302}]:}                id  \textbackslash{}
+          23431    26771065   
+          114008   13506790   
+          115123   58239138   
+          163454   49807970   
+          175135   74515089   
+          176985   34792972   
+          203736   41439946   
+          209795   55734902   
+          222834  254384476   
+          313885  261498089   
+          328092  214080221   
+          247541   59591288   
+          406409  236176990   
+          53118     3561943   
+          282108  227643889   
+          198733   66676023   
+          19290    14809593   
+          241254   88205904   
+          169427   52826480   
+          429947  249116779   
+          291742  222325227   
+          123178   67648762   
+          165586  152026704   
+          203964   48073340   
+          238782   55801894   
+          250748   56971983   
+          294123  190181438   
+          111796   90062856   
+          274232   98035905   
+          113579  171737472   
+          {\ldots}           {\ldots}   
+          319605  197035532   
+          207270  163836405   
+          9028     23272403   
+          134693   52961811   
+          237619   52454903   
+          163161  145924083   
+          361905  202263084   
+          275742  101183834   
+          105680   22263276   
+          243274  115055865   
+          40109     6048167   
+          40869    59066509   
+          56451    10539559   
+          75336     5429683   
+          81939     7874842   
+          83336    57769361   
+          115888  124362777   
+          123795   48522888   
+          139734  209578865   
+          171655   61683104   
+          194377   78696738   
+          232875  120761359   
+          234212  233029175   
+          236649  158162736   
+          246762  154246706   
+          288696  142311004   
+          310802  170111148   
+          341072  166483459   
+          376415  177703361   
+          431433  257817009   
+          
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 comments  \textbackslash{}
+          23431   The room was a good size. However it didn't seem that the sheets were clean since I found long female hair in the bed. Also I had an evening appointment and Susan told me that she lost her extra key so she couldn't provide me with my own key. And she would like me to not come home too late since she would have to wait up for me to return so she could let me into the building and the apartment. And if I wanted to come home after 11 pm she wanted me to call her to let her know. And she would prefer that I didn't come home later than 12. It really felt like a curfew and it was annoying since {\ldots}   
+          114008  Me and my party have mixed feelings on our stay with Noa. I'll start with the positives: Noa is a great host. He gave us a warm welcome and a nice intro. to the area, transport etc. He even contacted me mid-stay with more suggestions on what to do. Noa also provided 2 sets of keys and was very flexible with check out times - much appreciated! We were provided with clean bedding and towels upon arrival and the fridge was stocked with a few complimentary drinks. The location of the flat is fantastic. A 1 minute walk to the bus stops (in and out of downtown) and a 4 minute walk to the subway{\ldots}   
+          115123  Ari was awesome we were so fortunate to book his place last minute in NYC on New Years eve! My partner and I had booked a different airbnb for the evening previously but unfortunately the host had a change of plans and had to cancel on us. In a mad scramble I found Ari's place and it was everything we could have hoped for and more.   The apartment itself was clean, modern and warm, huge by New York standards. We only met Ari for a minute on his way out, he handed us the keys and gave us a quick overview.  While we were out for most of the day and evening, when we got back the apartment bui{\ldots}   
+          163454  Catia's small studio is lovely, well-decorated and she's done a great job organizing it, which is important since it's a small space. It was fine for two of us (my wife and I). The only slight issue is that there's really not much of a place to put clothing that doesn't hang -- we had to use the couch for that purpose. She has a well-functioning kitchen and a Nespresso machine and milk steamer which quickly makes nice shots. The small stove works nicely. The location is convenient, just a couple of blocks from Penn Station with easy access to subway lines. She has TV and a Roku box so when{\ldots}   
+          175135                                                                        Sasha was kind enough to pick us up at the subway station and walked with us to his apartment. A very kind and hospitable man. We stayed there for four nights and didn't see him and his wife much during our stay because we were in town most of the time. The apartment was okay, but not very clean. The dog was well-behaved and playful, but his hairs were all-over. The location is very good! Nice safe neighborhood, lots of restaurants nearby, super close to the subway and 2 blocks to central park. The price was decent as well.   
+          176985  We had a great stay. Everything was as expected and the townhouse was even much bigger than we anticipated given he typically small NYC apartments. It was amazing to stay in a traditional New York brownstone. There were 4 floors total in the townhouse. 2 twin beds in a room and a queen bed in a room on each of the two upper floors. Each of the two upper floors had a bathroom. The main floor had  a living room and large open kitchen. The basement had a large TV in the living area and the third bathroom. The stairs were a bit steep and narrow for the mobility impaired but we're fine for our {\ldots}   
+          203736  Susan made my first AirBnb experience one that will be hard to top! She stayed in contact with me leading up to my arrival, and made sure that I knew exactly where to go while remaining very flexible with my checkin time as my travel plans were somewhat unset. She gave great advice on places to eat, where to and not to go, transportation, and even fun things to do in the city. Her place was exactly like the pictures, with a workable room, huge bathroom, living room and kitchen. Had all the amenities one could need. Susan was so polite and easy to talk to. I look forward to booking another {\ldots}   
+          209795  Gill met me at a coffee shop across the street to help me check into the apartment. It was all very easy, and though the apartment is on the second floor, there's an elevator that makes carrying luggage much easier. It couldn't have been cleaner or better suited for a single person or a couple. I was traveling for business, and appreciated the large tv with netflix for nightly unwinding! The bed was comfortable, there was plenty of space (storage + large living area), the kitchen was quite nice and clean, and the neighborhood was convenient to midtown and transportation. Will definitely st{\ldots}   
+          222834                                                                                                                                                                                                             Not the first time and not the last time we'll stay at Donna's place.  She treats us better than if she were my sister!  Friendly, helpful, flexible and respectful are what best describe our host.  The space is in the best place and the large, clean, modern bathroom is very welcome.  I should be careful of making it sound too nice because YOU may have booked the week that I want in the future!   
+          313885  It was for the four of us the first time that we stayed in an apartment through Airbnb and we all want to thank Leslie that she made it enjoyable for us. Leslie is very quick in responding to our messages, prior and during our stay in NY. She’s been very helpful to us and clear in communication. Of course I read the reviews before I booked her apartment and it’s true what others wrote: the apartment is clean (fresh smelling sheets \& towels, nice odor as soon as you enter the apartment), feels homely, fully well equipped kitchen and it has an air conditioning. The apartment is located in a {\ldots}   
+          328092  Apartment smaller of what I expected. Pricy when you compare to hotels around the area ( I had to stay a night before in the La Guardia airport -Marriot-, same price per night, a huge difference in quality), unfortunately I had already paid for the apartment. It was late to request a refund.  Squeaky beds, hard to sleep with so much noise. One of the mattress had a hole. Shower walls with mold and tub needed a little scrub. The curtains were just pieces of leftover clothes hanging from the frame of the windows. Spooky area, next door to projects. Host was unable to reach. Unresponsive when{\ldots}   
+          247541  One of the things I'll commend Ben for was how accommodating he was to my group that he hosted. He was able to diligently manage us smoothly despite our complicated booking d/t independent arrivals. It's worth mentioning too that Ben was easy to reach at all times and made sure that gaps in communication prior to arriving at his apartment were cleared up way before arriving. Even during the stay, Ben always made sure to ask about how our day or trip was going, and whether we needed absolutely anything. He was what true hospitality should be.  It was a pleasure to stay his apartment because{\ldots}   
+          406409  We loved! The place was literally our home for almost 20 days!!  Pros: it was warm all the time, which was great (a lot of snow outside). It had a lot of amenities and everything you could ask for. The bed was great by the way. We absolutely loved the aroma diffuser!!!! Con: the drawers of the dresser were all broken and missing some bolts so we had to use super glue to fix it (we couldn’t even left our clothes there because it was literally falling apart).  But despite this little issue, everything went fine. We never met Nikita in person but the times that we needed to talk to him by pho{\ldots}   
+          53118                                                                                           It was a pleasant stay at casper's. My flight was delayed for one day due to snowstorm and Casper was very responsive on coordinating getting in and out of the apartment for me. Everything was clean and Casper was nice enough to refund half of the first missing day for me because of the flight delay! The only thing you have to be aware of is the 4 flights of stairs walking up to the apartment. We had two girls going shopping everyday with handful of bags so we definitely got a great workout climbing up. =P   
+          282108  The apartment was exactly as described and gave our family of 4 the extra room we needed (with 2 college age kids).  All the amenities you could ask for, as well as many extra blankets, sheets, and towels all labeled and easy to find.  I think the murphy bed is a little more comfy than the queen bed, but both are nice.  Stairs are narrow, but typical for older apartments.  Brian had several menus for local restaurants available, and that was helpful when deciding where to go or who delivered.  The location was perfect and close to hop the subway to Times Square, Central Park, Downtown or B{\ldots}   
+          198733  As soon as Jason opened the door, I've felt like meeting a friend and not a stranger. He has a wonderful personality so that you feel comfortable and welcomed immediately.  The apartment was as described and there have been no unfriendly surprises. The location is perfect to explore the city! Jason was always helpful, told me a good bakery store and shared his wisdom with me in our morning/evening talks.  It did not take me long and I've felt like home at his apartment. I even became kind of friends with his cat Marley; she's a character!  Next time I'll be in New York, I definitely try to{\ldots}   
+          19290                                                                 This was my 2nd time staying at Ruth's charming studio apartment. The terrace and the location cannot be beat; they are my two favorite things about the apartment that warranted a return visit.  The 72nd subway stop is minutes away, and the outdoor space for a cup of coffee in the morning and a glass of wine at night is perfectly lovely.  Ruth is always a very gracious host - a nice combination of being helpful and available but not intrusive. :)  Thanks, Ruth, for another fabulous stay!  I so appreciated the opportunity to return!   
+          241254                                                                                                                                                     Our time in NYC was all the more enjoyable getting to stay in the best apartment in the heart of the Upper East Side! We were so sad that we didn't get to actually meet Ross and Ragan in person, but they were readily available to answer any and all questions we had. The place is just like the pictures and we loved getting to feel what reality is like living in the city. We are hoping to make plans to return to NYC and would love to stay here again!   
+          169427  The apartment is lovely - clean and in a great location. Tanya did all the artwork in the apartment herself so there are paintings decorating the apartment walls that were a great touch. I can't speak for the other guest rooms, but I stayed in the "Charming" room which had a comfortable bed. I was only in the apartment to sleep since I was out all day, but Tanya was very fast in answering my questions via email (usually within several minutes!). I also loved how the location was just a few minutes walk from my favorite pizza place Lombardis. Unfortunately she was out of town for most of th{\ldots}   
+          429947                                                                                            Nour's place was extremely clean and simple, which was great as it was not cluttered with things you do not need.  All the basics were there.  Location is perfect.  He was very kind, quick with responses, left snacks for us, gave us recommendations.  The bedding was very comfortable. There was a closet for hanging clothes and a table with 2 drawers for storage.  The room decoration was just like the picture. The bathroom was very clean and had a tub w/shower head.  Would stay there again in a heart beat.   
+          291742  I highly recommend this place to everyone. It was my first time using Airbnb and my first time in NYC. There was a lot to be intimidated by on my end. However, this part made the whole trip feel much smoother. His place is clean, the bathroom is large, the neighborhood is quiet, I felt safe, it was close to a major subway line, and Fabien is very nice and really hospitable. He was so friendly and accommodating.  One of the major things I was looking for in a place was price and location. Since it was our first time in NYC we wanted to do all the major tourist things, which the majority are{\ldots}   
+          123178                                                                                                                                        Matteo wasn't just a host, he was like a big brother to me and my friend during our stay. We love him, his place, and his taste in music and design! We stayed for 3 weeks and was so fond of him and the place, it was so hard to say goodbye!  The room is clean and so comfortable, the kitchen is fully equiped, the living room is lovely and it is very near to the subway too.  Highly recommend this place if you want a warm trip in NYC, it was really worth the price.   
+          165586                                                                       Highly recommend this place - just make sure as you're good with the 6 flights of stairs to lead you to the top! I love the location and local neighborhood of this place, it's very lively and you can find anything walking distance. The climb up makes the apartment quiet, and I enjoyed relaxing in the kitchen with the sun pouring in the morning and also in the bedroom.  Apartment is clean, comfortable bed, friendly and respectable and quiet roommate. Great, quick and easy communication to coordinate keys. Stay here and enjoy!   
+          203964                                                                                            My family and I stayed in the apartment for 5 days. It is like it appears in the photos. Confortable for 4 people, clean, with all the comforts. There weren't the sheets for the second bed (anyway there was a blanket) and Jay apologized for the lack. The apartment is 15 minutes on foot from the subway station (3 streets and 3 avenues). In the neighborhood there are a lot of markets.  Jay was very kind, helpful and he answered all our requests.  I definitely suggest this apatment for your holidays in NYC.   
+          238782  Just returned from a fab weekend in New York staying at this lovely apartment in Gramercy. Super convenient for everywhere, walking distance to midtown shops (20mins), lots of great bars nearby \& subway station about 5mins away. Beautiful apartment, everything looked brand new \& sparkling clean. Lovely stone feature wall, very NY! 2 bathrooms which is a huge bonus. Comfortable beds \& lots of wardrobe space. Even a private outdoor patio area! TVs \& all appliances you could need although we ate out you could easily cater in, everything you need is there with convenient supermarkets nearby fo{\ldots}   
+          250748                                                                                                             The location is convenient, bus stop is on the side. The room is spacious and the mattress is comfortable. The only problem I had is the room temperature. I stayed there for three nights, the first two night there is no AC on, so I felt a little bit freeze in the evening，and the third night，the A/C is on， which makes it super hot in the room me and I can't turn them off. The only thing I can do is to open the window to cool down the room. Except for this prob, I'd say everything is cool.   
+          294123                                                                                                                                                                Very clean, lovely place in an awesome location. I love China town and it is actually in a very quite street. The 2 roommates are abaolute dears as well and great to talk to. However the room is so small that I could open my suitcase properly and sadly there was barely any storage space. The bed is very large with a lot of very comfortable pillows. I would recommend staying here, but only as a single person and not with a lot of luggage.   
+          111796  Steve and Palm are wonderful!   Everything was great.   I was there for one month and was completely comfortable and welcome. Most of the time I was in the house I was alone there and even then we managed to became friends very easily! They are a very nice couple.  They have airconditioner, and during the summer in NYC it was completely necessary.   The neighborhood is the best I could ever choose great nightlife, great restaurants(with great prices!), bars, bookshops, parks and subways. And their apartment is right in the perfect spot.  Loved my stay. Would definetly indicate (actually al{\ldots}   
+          274232                                                                We had a great time staying at Tom \& Emma's place. The roof was a really nice addition to the stay. We had a visit from one of the neighbors on arrival that was unwelcoming (he knew we were Airbnbing), but we never heard from him again. The rest of the neighbors were welcoming and friendly. Tourists can access the 2/3 lines and be in Time Square in \textasciitilde{}20 minutes. I preferred walking 126th to the train on my commute as it was less busy. Harlem is wonderful and lively, we loved dining on Malcolm X Boulevard. Their spot has 3 PokeStops.   
+          113579                                                                                                                            Nice small apartment, very clean. Great communication with the host, she got back to us right away and was able to check us in for under 3 hours, from the booking time. A bit of a hike from a subway, but when you get there it's only a short ride to the main attractions. Neighborhood wasn't amazing and didn't feel quite safe to walk around with young kids. I didn't think it was too bad, but my husband hated the location. Ok to spend the night when you traveling on a budget.   
+          {\ldots}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         {\ldots}   
+          319605                                                                                It was a wonderful experience with kerry, excellent communication, always outstanding, everything well created and very professional, the studio very clean and beautiful, very centric no noise in the end had a great time, his door man with his security, no words one jewel if I return the contact I swear, 3 streets have the subway, and the rest is yours, pizzerias markets, in the building with starbucks in anyway everything is there, thanks kerry :) do not miss this opportunity I assure you that you will do very well   
+          207270  First off, Katherine was great. Really quick to respond to messages, and check-in/check-out were incredibly easy. Plus, her breakdown of house tips was invaluable for a detail-dependent person like myself.   The apartment is in a rad spot—near tons of bars, restaurants, and shops, only a couple blocks from the nearest subway station. Just small enough inside to keep that cozy city vibe without being too tight, and her Apple TV was a nice touch, although we didn't even need it since we were out and about so much. Plus, all our attention was on Tuxedo Todd the house cat, who was the friendli{\ldots}   
+          9028    What a location. Its 5 mins walk to the 2 Av subway station, 10-12 mins walk to Soho and 5 mins walk to Chinatown. This is really ideal if you want to experience the city by day. Reina was very helpful in helping me and I wish I could have known her better due to my busy schedule. She's also very quick with response time, I almost had a panic attack in which I thought I couldn't make it to my booking but she was more than helpful and even advised me on options.   All in all, I had a great 14 days with this stay and I would recommend this place to others especially if you want to be part of{\ldots}   
+          134693  We had a nice stay in the apartment which is great located close to the highline, times square and Penn station. The apartment it self was clean and functional. The apartment was painted in some quite dark colors which we did not find super cozy. However I guess this is just a matter of preference, so some may find this very nice. The host was very flexible regarding our check-in/check out time and supplied us with some info about the local area such as grocery stores, restuarant, etc. which was nice. All in all we can not complain. We had a nice stay and the apartment was pretty much as e{\ldots}   
+          237619  We were the lucky first occupants of this lovely, spacious, clean and well situated apartment. John greeted us himself and we were very pleasantly surprised - the photos on Airbnb do not do justice to this two bedroom apartment that is only 5 mins from Times Square and 2 mins from Restaurant Row.  The building looks recently renovated and our ground floor apartment certainly was. Large, airy rooms that are spotlessly clean and well equipped with a full kitchen and bathroom complete with bath tub/shower over. The spacious master bedroom is very light, it has three sets of windows and the se{\ldots}   
+          163161            I got the run around on finding the key and being let into the unit. The host was out of the country, the person she left in charge also ended up being out of the country. The person she left in charge gave the key to a friend who was suppose to leave it for us in a pizza shop. The key never made and we were stuck out in the cold, in Harlem (the non-gentrified side), at 10 pm. We didn't get into the unit for an hour and a half when finally the host called the janitor of the building to let us in. Was my experience an anomaly? Perhaps, but I definitely wouldn't use this person again.   
+          361905                                                                                                                                          It was a really cozy apartment. We really enjoyed our stay at David’s place. The location is good, not too central - the noise is big issue, but close to most places you want to go. David has provided almost everything you’ll need during your stay, if not the 24hr store is just 2mins walk away.  The only concern would be no air con, we had a few wet but hot days. Made it hard to fall asleep and very humid too.  Overall was a great host. Will highly recommend!   
+          275742                     Everything about our stay at Lee's place was simply perfect.  I could not imagine a more perfect host.  Great communication from the very beginning. Lee was super kind and very helpful , offered help and was responsive right away.  The location of his apartment is FANTASTIC and the apartment itself was very clean and extremely comfortable.  It was truly a pleasure staying there.  Thank you so much Lee for making our trip to NYC unforgettable.  I will not even look into hotels next time we wanna go to NYC.  I will look for your apartment again.  Thanks! You are an A+ host!!!   
+          105680                                                                                                                                                                                 I had such a great stay at Michelles place! The place is very warm and cozy with a great location close to the subway with easy connections to JFK and Newark airports. Best of all was meeting Michelle who was a fabulous host, she is very open, sweet and welcoming and made me feel right at home. I would definitely like to stay with Michelle again when I visit New York again, and I highly recommend others to do the same :)   
+          243274                                                                                                                                                                                     If you like the east village scene then this is a great place to stay.We slept well here-comfy beds and pretty quite street considering it is centrally located.Not many people seem to use this street as a through way.Relaxing place to hang out in when you just wanna get off the streets for a bit. Up one flight of stairs. Will try to stay here again next time we come to nyc. Ben and Ariel were good with communication.   
+          40109   We vere a family of four staying in Davids apartment for nine days. It was a perfect place to stay. Near by everything and still quite. New York was very hot at the moment, and the AC functioned. The apartment was spacious. Our two teenagers could very well stay in the smallest bedroom. The apartment is in the 5.floor and had a lot of light. It is charming and reminded me of my student days though a bit more comfortable. The kitchen was ok. We did not make dinner there but breakfast and small meals. The steps can be a problem but it was ok for us. The nighborhood is grate! Lots of nice res{\ldots}   
+          40869   If we had to resume our stay to one word, it would have to be: disappointed. Although the location lived up to its expectation (nice neighborhood with plenty of new trendy shops/restaurants), and the apartment was actually more spacious than we imagined, there were many things that made the experience unpleasant. -We arrived at check-in on time and had to wait more than two hours to get the keys, while they kept telling us it would be just 10 more minutes{\ldots} - On arriving into the apartment, we smelled some gas, which turns out was leaking from the gas stove. When I started feeling a light{\ldots}   
+          56451   Abby's place was in an interesting location, filled with small taquerias and empanada shops. Its close to the subway, but it takes about forty minutes to get downtown. It would have been nice to have some closet or drawer space to store our stuff while there, as it can get crowded. The cat Gretchen moved between moments of friendliness and (weird) aggression. As I reached out to grab my jacket next to her she scratched my hand. Also frustrating--though this seemed like an exception--was the fact she accidentally smeared poop on our bed (there was luckily a change of sheets in the closet). {\ldots}   
+          75336   Sabrina De Vanna:  I had to write some of my comments on your rental apartment.  1. Your apartment is leaking badly when rain. I have to put a buckle and a towel under the big leaking. I am just a tenant ; not responsible to help your leaking roof. You told me the apartment is leaking for 6 months. Why you did not disclose this information in the airbnub advertisement ?  2. You advertised your Apartment has an oven for cooking but you piled so much staffs on a small table in front of the oven. your oven is not accessible .   3. In 3 weeks, you did not provide me with a new sheet and a new {\ldots}   
+          81939   Great location and a very nice apartment, They guys are nice we only saw them for 2 minutes our whole stay.  The bedroom is Small, for 2 it was very tight.  But overall the apartment was clean and inviting and location was key for us.  It is only on the 4th floor so bring ear plugs it is LOUD and Noisy.  Enjoy NYC!  Watch out after posting my review I received harassing emails and texts from the owners!  He has a temper and unless you write a rave review he gets mad and threatening{\ldots} and my review was honest and nice, the guest bedroom is loud with street noise..we had to have ear plugs e{\ldots}   
+          83336   Had mixed feelings about the place. The neighbor welcomed us in and was very friendly. We were 4 to stay at Isabelle's apart for 3 nights. The place is close to the subway system, near bars \& restaurants. On the downside, the shower wasn't fully functional and the kitchen sink was not working properly.  I know it is NY and you can't escape the noise, but the location was pretty noisy compared to another place we stayed at on 19th street. If you don't go out at night, you will hear the people partying below along with the traffic. If you do go out at night, the construction across the city {\ldots}   
+          115888  Pros: - have the apartment to yourself - minimal and chill - plenty of drawers and dressers - microwave, fridge, freezer, dishes, utensils - walk-in closet - comfortable bed and pillows - airconditioner and fan - wifi - TVs - two blocks from the A train  Cons: - host falsely accused me of having others stayover and swindle extra money from me - extremely dusty floors, can't walk barefooted or with socks - dusty and trash under bed, dressers, couch - stains on pillow cases and sheets - loud noise from neighbor playing music - toilet seat is loosely screwed/defective - no warm or hot water i{\ldots}   
+          123795                                                  Having never met Alessandro it is difficult to rate the host! We were met by a maid who just handed us the keys and didn't explain anything about the apt. The apt was very clean but lacked amenities such as soap in the shower \& shampoo. Since it is on the 1st floor and close to the street it is quite noisy due to the restaurants \& bars downstairs. The sofa bed is very uncomfortable There was no possible way to extend check out time as Alessandro booked another guest the same day we were leaving. Its obvious that this is a business for the host !   
+          139734  Overall, a fine well-furnished apartment in a great location with a nice host. Pros: 1) perfect location in the very heart of NYC close to subway and tons of places to shop and eat around 2) atmosphere – the building is a classic NYC walkup, in good condition, and it's only one flight of stairs to the apartment 3) the apartment itself is well-designed, organized and comfortable 4) no windows to the street side, so very quiet 5) clean, although not impeccably so (see below) 6) more reasonably (or rather, less unreasonably) priced than many other comparable properties 7) flexible cancellatio{\ldots}   
+          171655                                     My girlfriend and I were staying in Leonardo's place for two weeks. It was a great experience for us. The location is perfect: food, grocery, subway, sites - everything is very close. The apartment in very small, but there is enough space for a couple and you will probably spend most of your time out. Sometimes it gets noisy and you may hear neighbors from upstairs walking in their apartment or main door opening/closing. However it is not that bad and I would definitely recommend this place to stay. Everything went smoothly with Leonardo, he is a great host.   
+          194377  I really have a hard time reviewing our stay at Yana’s. On the one hand, Yana is a very nice person. It is fun talking to her and she makes you feel welcome. But as much as I want to give her a five star review I just cannot.  At first sight the apartment looks very clean, but it's actually just cleaned superficially. It looks clean but touching it makes you realize it is not as clean as you might have thought. They underside of the toilet seat was not cleaned at all, it was not white. Although the cat George is very nice and fun to play with, be aware he can be very annoying and dirty too{\ldots}   
+          232875  I put my family up at Tomas's place, big mistake. It was a terrible walk up through dirty halls filled with pot smoke. I had my parents and sister with two kids, so it was not appropriate.  The apartment is extremely noisy and unbearable for them to sleep, plus the neighbors party till weeeeee hours.  Tomas also charged me way too much for what he offers and addition charged me for a toddler? I don't recommend this to anyone that wants a relaxing space.  If you stay up all night, then this is the perfect spot for you.  Be in great shape because the walk up is steep and slippery.  I give it{\ldots}   
+          234212                                                                                                                                                     Me and my boyfriend stayed at Tom's place for 5 nights. The apartment was clean, true to the pictures and had everything we needed as well as a bit more. Tom was very responsive, helpful and nice. Our only problem was that although the block where the apartment was situated felt safe, the 5min walk to the subway did not. But, as long as you won't have to walk alone during nighttime it doesn't really matter and besides that everything was wonderful!   
+          236649  Unparalleled location if you come to town for broadway shows or general site seeing. Right in the heart of the best part of NYC. Jixxy was very welcoming and exceedingly helpful. That said, I do believe the cleanliness could have been better. The apartment is quite old so just be prepared that things like the shower are a little grungy, bathroom ceiling would leak periodically, and other minor issues. I would absolutely recommend a dtay here given the value for being in the perfect location. We didn't spend much time inside, so it didn't bother us. Jixxy is a great host and made herself re{\ldots}   
+          246762                                                                                                                                                        You may be amused or even alarmed by everyone's comments praising the host to some heavenly level as to diminish how beautiful the place is. I assure you, those praises are well-deserved.   Close to 110st Cathedral station on the west side, going down to tribeca and West village takes no more than half an hour.   Also, I believe I am also obliged to praise MaElena's larger than life hospitality that comes without impurity. She is awesome indeed.   
+          288696                                               Pros: Apartment as advertised! - Michael is a great host: meets you upon arrival, very cordial, accessible, and accommodating - Apartment feels like a home: very cozy and comfortable, and plenty of space for 4 people - Convenient location: easy walk to Times Square, the subway, many restaurants, etc  Con (only one):  - If you're a light sleeper, this might not be the place for you. Building is located on the corner of a street intersection. Also, floors, doors, and stairs are a bit creaky, but keep in (Website hidden by Airbnb) a historic building!   
+          310802       This accommodation was really old and crusty. There were stains on the couch and bedsheets! Some mould in the bathroom too which is likely age but still not entirely clean. Also the toilet didn't flesh properly. All one wants in accommodation is usually cleanliness and for things to work. Wifi didn't work but that is likely the ISP not the accommodation itself. The place is also very noisy and poorly insulated, which means on a hot day the aircon is not effective at all. This place maybe okay value by NY "standards" but otherwise not great at all. All NY accommodation is an utter ripoff.   
+          341072  I don't know how this unit is getting great reviews, but we found it HORRENDOUS. I have stayed in Air B and B's in large cities{\ldots} Never in NY, so maybe NYC sets a pretty low bar. But this was awful. First of all, it's been represented as family friendly. The bathroom lock was broken. There was some crap on the shower curtain. There were partially used bottles of mouthwash, deodorant sticks, and get this{\ldots} KY Jelly, in the bathroom. The kitchen had partially eaten food in the fridge. The towels had stains on them. The old world window AC's were so noisy that my 5 year old couldn't even sl{\ldots}   
+          376415  LISTING DESCRIPTION The title of the listing is "Renovated Manhattan Apartment" don't be fooled by that! It is nowhere close to that.  For one it is on the border of Manhattan and East Harlem but has more of the Harlem feel.  The address we were given was incomplete and incorrect so I had to call several times and the owner's neighbor had to speak to my uber driver to get the proper address.   PHOTOS In the photos, the property is showed as being in a revived area with beautiful artwork on the street walls.  This wasn't our reality when we finally made it to the address and were met by the{\ldots}   
+          431433                                                                                                                                     When I travel all I really require is a comfortable bed and a quiet night sleep and Close proximity to transportation, this met all of these. Maya was extremely gracious and helpful during my stay and kept the apartment in tiptop shape. So much has changed since I lived in the city in the 90s and Little Italy offers so much more than I would’ve imagined. The lower Eastside is a whole Nother world I wish I could explore more and that was also so very close as well.   
+          
+                  sat\_level\_interrater  sat\_level\_afinn\_o  sat\_level\_vader\_o  \textbackslash{}
+          23431                      1                  1                  3   
+          114008                     2                  3                  3   
+          115123                     3                  2                  3   
+          163454                     3                  2                  3   
+          175135                     2                  2                  3   
+          176985                     3                  2                  3   
+          203736                     3                  2                  3   
+          209795                     3                  2                  3   
+          222834                     3                  2                  3   
+          313885                     3                  3                  3   
+          328092                     1                  1                  3   
+          247541                     3                  2                  3   
+          406409                     3                  2                  3   
+          53118                      3                  2                  3   
+          282108                     3                  2                  3   
+          198733                     3                  2                  3   
+          19290                      3                  3                  3   
+          241254                     3                  2                  3   
+          169427                     3                  3                  3   
+          429947                     3                  2                  3   
+          291742                     3                  2                  3   
+          123178                     3                  2                  3   
+          165586                     3                  3                  3   
+          203964                     3                  1                  3   
+          238782                     3                  3                  3   
+          250748                     3                  1                  3   
+          294123                     2                  2                  3   
+          111796                     3                  3                  3   
+          274232                     3                  2                  3   
+          113579                     3                  2                  1   
+          {\ldots}                      {\ldots}                {\ldots}                {\ldots}   
+          319605                     3                  2                  3   
+          207270                     3                  2                  3   
+          9028                       3                  2                  3   
+          134693                     3                  2                  3   
+          237619                     3                  3                  3   
+          163161                     1                  1                  3   
+          361905                     2                  2                  3   
+          275742                     3                  3                  3   
+          105680                     3                  3                  3   
+          243274                     3                  2                  3   
+          40109                      3                  2                  3   
+          40869                      1                  2                  3   
+          56451                      2                  1                  3   
+          75336                      1                  1                  1   
+          81939                      1                  2                  3   
+          83336                      2                  1                  3   
+          115888                     2                  1                  2   
+          123795                     2                  1                  1   
+          139734                     2                  3                  3   
+          171655                     3                  1                  3   
+          194377                     2                  3                  3   
+          232875                     1                  1                  2   
+          234212                     3                  2                  3   
+          236649                     3                  2                  3   
+          246762                     3                  2                  3   
+          288696                     3                  1                  3   
+          310802                     2                  1                  1   
+          341072                     1                  1                  3   
+          376415                     2                  1                  1   
+          431433                     3                  1                  3   
+          
+                  sat\_level\_so\_cal\_o  sat\_level\_s140\_o  sat\_level\_op\_bow\_o  \textbackslash{}
+          23431                    1                 1                   1   
+          114008                   2                 1                   2   
+          115123                   2                 1                   2   
+          163454                   2                 3                   2   
+          175135                   2                 1                   3   
+          176985                   2                 3                   2   
+          203736                   2                 3                   2   
+          209795                   2                 3                   3   
+          222834                   2                 3                   3   
+          313885                   2                 3                   2   
+          328092                   1                 1                   1   
+          247541                   2                 3                   2   
+          406409                   2                 1                   2   
+          53118                    2                 1                   2   
+          282108                   2                 3                   2   
+          198733                   3                 3                   2   
+          19290                    3                 3                   3   
+          241254                   3                 1                   2   
+          169427                   2                 2                   3   
+          429947                   2                 3                   2   
+          291742                   2                 2                   2   
+          123178                   2                 2                   3   
+          165586                   2                 3                   3   
+          203964                   2                 2                   2   
+          238782                   2                 3                   2   
+          250748                   2                 1                   2   
+          294123                   2                 2                   3   
+          111796                   3                 3                   3   
+          274232                   3                 3                   2   
+          113579                   1                 2                   2   
+          {\ldots}                    {\ldots}               {\ldots}                 {\ldots}   
+          319605                   3                 3                   2   
+          207270                   2                 3                   2   
+          9028                     2                 2                   2   
+          134693                   2                 3                   2   
+          237619                   2                 3                   2   
+          163161                   1                 1                   1   
+          361905                   2                 1                   1   
+          275742                   3                 3                   3   
+          105680                   3                 3                   3   
+          243274                   2                 3                   2   
+          40109                    2                 3                   2   
+          40869                    2                 1                   1   
+          56451                    1                 3                   1   
+          75336                    1                 1                   1   
+          81939                    1                 3                   1   
+          83336                    1                 1                   1   
+          115888                   1                 3                   1   
+          123795                   1                 1                   1   
+          139734                   2                 3                   2   
+          171655                   2                 3                   2   
+          194377                   2                 3                   1   
+          232875                   1                 2                   1   
+          234212                   2                 2                   3   
+          236649                   2                 3                   3   
+          246762                   2                 3                   2   
+          288696                   2                 2                   2   
+          310802                   1                 1                   2   
+          341072                   1                 1                   1   
+          376415                   1                 1                   1   
+          431433                   2                 1                   2   
+          
+                  sat\_level\_op\_freq\_o  
+          23431                     2  
+          114008                    2  
+          115123                    2  
+          163454                    2  
+          175135                    3  
+          176985                    2  
+          203736                    2  
+          209795                    3  
+          222834                    3  
+          313885                    2  
+          328092                    1  
+          247541                    2  
+          406409                    2  
+          53118                     2  
+          282108                    2  
+          198733                    2  
+          19290                     3  
+          241254                    2  
+          169427                    2  
+          429947                    2  
+          291742                    2  
+          123178                    2  
+          165586                    3  
+          203964                    2  
+          238782                    3  
+          250748                    2  
+          294123                    3  
+          111796                    3  
+          274232                    2  
+          113579                    2  
+          {\ldots}                     {\ldots}  
+          319605                    2  
+          207270                    2  
+          9028                      2  
+          134693                    2  
+          237619                    2  
+          163161                    1  
+          361905                    1  
+          275742                    3  
+          105680                    3  
+          243274                    2  
+          40109                     2  
+          40869                     2  
+          56451                     1  
+          75336                     1  
+          81939                     2  
+          83336                     1  
+          115888                    1  
+          123795                    1  
+          139734                    2  
+          171655                    2  
+          194377                    2  
+          232875                    1  
+          234212                    2  
+          236649                    3  
+          246762                    2  
+          288696                    3  
+          310802                    2  
+          341072                    1  
+          376415                    1  
+          431433                    2  
+          
+          [70 rows x 9 columns]
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}309}]:} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{n}{sentence\PYZus{}tools}\PY{p}{]} \PY{o}{=} \PY{n}{summary\PYZus{}table}\PY{p}{[}\PY{n}{sentence\PYZus{}tools}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}310}]:} \PY{n}{sentence\PYZus{}lvl\PYZus{}tbl} \PY{o}{=} \PY{n}{build\PYZus{}levels\PYZus{}table}\PY{p}{(}\PY{n}{summary\PYZus{}table}\PY{p}{,} \PY{n}{sentence\PYZus{}tools}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}311}]:} \PY{n}{sentence\PYZus{}lvl\PYZus{}tbl}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}311}]:}                id  \textbackslash{}
+          23431    26771065   
+          114008   13506790   
+          115123   58239138   
+          163454   49807970   
+          175135   74515089   
+          176985   34792972   
+          203736   41439946   
+          209795   55734902   
+          222834  254384476   
+          313885  261498089   
+          328092  214080221   
+          247541   59591288   
+          406409  236176990   
+          53118     3561943   
+          282108  227643889   
+          198733   66676023   
+          19290    14809593   
+          241254   88205904   
+          169427   52826480   
+          429947  249116779   
+          291742  222325227   
+          123178   67648762   
+          165586  152026704   
+          203964   48073340   
+          238782   55801894   
+          250748   56971983   
+          294123  190181438   
+          111796   90062856   
+          274232   98035905   
+          113579  171737472   
+          {\ldots}           {\ldots}   
+          319605  197035532   
+          207270  163836405   
+          9028     23272403   
+          134693   52961811   
+          237619   52454903   
+          163161  145924083   
+          361905  202263084   
+          275742  101183834   
+          105680   22263276   
+          243274  115055865   
+          40109     6048167   
+          40869    59066509   
+          56451    10539559   
+          75336     5429683   
+          81939     7874842   
+          83336    57769361   
+          115888  124362777   
+          123795   48522888   
+          139734  209578865   
+          171655   61683104   
+          194377   78696738   
+          232875  120761359   
+          234212  233029175   
+          236649  158162736   
+          246762  154246706   
+          288696  142311004   
+          310802  170111148   
+          341072  166483459   
+          376415  177703361   
+          431433  257817009   
+          
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 comments  \textbackslash{}
+          23431   The room was a good size. However it didn't seem that the sheets were clean since I found long female hair in the bed. Also I had an evening appointment and Susan told me that she lost her extra key so she couldn't provide me with my own key. And she would like me to not come home too late since she would have to wait up for me to return so she could let me into the building and the apartment. And if I wanted to come home after 11 pm she wanted me to call her to let her know. And she would prefer that I didn't come home later than 12. It really felt like a curfew and it was annoying since {\ldots}   
+          114008  Me and my party have mixed feelings on our stay with Noa. I'll start with the positives: Noa is a great host. He gave us a warm welcome and a nice intro. to the area, transport etc. He even contacted me mid-stay with more suggestions on what to do. Noa also provided 2 sets of keys and was very flexible with check out times - much appreciated! We were provided with clean bedding and towels upon arrival and the fridge was stocked with a few complimentary drinks. The location of the flat is fantastic. A 1 minute walk to the bus stops (in and out of downtown) and a 4 minute walk to the subway{\ldots}   
+          115123  Ari was awesome we were so fortunate to book his place last minute in NYC on New Years eve! My partner and I had booked a different airbnb for the evening previously but unfortunately the host had a change of plans and had to cancel on us. In a mad scramble I found Ari's place and it was everything we could have hoped for and more.   The apartment itself was clean, modern and warm, huge by New York standards. We only met Ari for a minute on his way out, he handed us the keys and gave us a quick overview.  While we were out for most of the day and evening, when we got back the apartment bui{\ldots}   
+          163454  Catia's small studio is lovely, well-decorated and she's done a great job organizing it, which is important since it's a small space. It was fine for two of us (my wife and I). The only slight issue is that there's really not much of a place to put clothing that doesn't hang -- we had to use the couch for that purpose. She has a well-functioning kitchen and a Nespresso machine and milk steamer which quickly makes nice shots. The small stove works nicely. The location is convenient, just a couple of blocks from Penn Station with easy access to subway lines. She has TV and a Roku box so when{\ldots}   
+          175135                                                                        Sasha was kind enough to pick us up at the subway station and walked with us to his apartment. A very kind and hospitable man. We stayed there for four nights and didn't see him and his wife much during our stay because we were in town most of the time. The apartment was okay, but not very clean. The dog was well-behaved and playful, but his hairs were all-over. The location is very good! Nice safe neighborhood, lots of restaurants nearby, super close to the subway and 2 blocks to central park. The price was decent as well.   
+          176985  We had a great stay. Everything was as expected and the townhouse was even much bigger than we anticipated given he typically small NYC apartments. It was amazing to stay in a traditional New York brownstone. There were 4 floors total in the townhouse. 2 twin beds in a room and a queen bed in a room on each of the two upper floors. Each of the two upper floors had a bathroom. The main floor had  a living room and large open kitchen. The basement had a large TV in the living area and the third bathroom. The stairs were a bit steep and narrow for the mobility impaired but we're fine for our {\ldots}   
+          203736  Susan made my first AirBnb experience one that will be hard to top! She stayed in contact with me leading up to my arrival, and made sure that I knew exactly where to go while remaining very flexible with my checkin time as my travel plans were somewhat unset. She gave great advice on places to eat, where to and not to go, transportation, and even fun things to do in the city. Her place was exactly like the pictures, with a workable room, huge bathroom, living room and kitchen. Had all the amenities one could need. Susan was so polite and easy to talk to. I look forward to booking another {\ldots}   
+          209795  Gill met me at a coffee shop across the street to help me check into the apartment. It was all very easy, and though the apartment is on the second floor, there's an elevator that makes carrying luggage much easier. It couldn't have been cleaner or better suited for a single person or a couple. I was traveling for business, and appreciated the large tv with netflix for nightly unwinding! The bed was comfortable, there was plenty of space (storage + large living area), the kitchen was quite nice and clean, and the neighborhood was convenient to midtown and transportation. Will definitely st{\ldots}   
+          222834                                                                                                                                                                                                             Not the first time and not the last time we'll stay at Donna's place.  She treats us better than if she were my sister!  Friendly, helpful, flexible and respectful are what best describe our host.  The space is in the best place and the large, clean, modern bathroom is very welcome.  I should be careful of making it sound too nice because YOU may have booked the week that I want in the future!   
+          313885  It was for the four of us the first time that we stayed in an apartment through Airbnb and we all want to thank Leslie that she made it enjoyable for us. Leslie is very quick in responding to our messages, prior and during our stay in NY. She’s been very helpful to us and clear in communication. Of course I read the reviews before I booked her apartment and it’s true what others wrote: the apartment is clean (fresh smelling sheets \& towels, nice odor as soon as you enter the apartment), feels homely, fully well equipped kitchen and it has an air conditioning. The apartment is located in a {\ldots}   
+          328092  Apartment smaller of what I expected. Pricy when you compare to hotels around the area ( I had to stay a night before in the La Guardia airport -Marriot-, same price per night, a huge difference in quality), unfortunately I had already paid for the apartment. It was late to request a refund.  Squeaky beds, hard to sleep with so much noise. One of the mattress had a hole. Shower walls with mold and tub needed a little scrub. The curtains were just pieces of leftover clothes hanging from the frame of the windows. Spooky area, next door to projects. Host was unable to reach. Unresponsive when{\ldots}   
+          247541  One of the things I'll commend Ben for was how accommodating he was to my group that he hosted. He was able to diligently manage us smoothly despite our complicated booking d/t independent arrivals. It's worth mentioning too that Ben was easy to reach at all times and made sure that gaps in communication prior to arriving at his apartment were cleared up way before arriving. Even during the stay, Ben always made sure to ask about how our day or trip was going, and whether we needed absolutely anything. He was what true hospitality should be.  It was a pleasure to stay his apartment because{\ldots}   
+          406409  We loved! The place was literally our home for almost 20 days!!  Pros: it was warm all the time, which was great (a lot of snow outside). It had a lot of amenities and everything you could ask for. The bed was great by the way. We absolutely loved the aroma diffuser!!!! Con: the drawers of the dresser were all broken and missing some bolts so we had to use super glue to fix it (we couldn’t even left our clothes there because it was literally falling apart).  But despite this little issue, everything went fine. We never met Nikita in person but the times that we needed to talk to him by pho{\ldots}   
+          53118                                                                                           It was a pleasant stay at casper's. My flight was delayed for one day due to snowstorm and Casper was very responsive on coordinating getting in and out of the apartment for me. Everything was clean and Casper was nice enough to refund half of the first missing day for me because of the flight delay! The only thing you have to be aware of is the 4 flights of stairs walking up to the apartment. We had two girls going shopping everyday with handful of bags so we definitely got a great workout climbing up. =P   
+          282108  The apartment was exactly as described and gave our family of 4 the extra room we needed (with 2 college age kids).  All the amenities you could ask for, as well as many extra blankets, sheets, and towels all labeled and easy to find.  I think the murphy bed is a little more comfy than the queen bed, but both are nice.  Stairs are narrow, but typical for older apartments.  Brian had several menus for local restaurants available, and that was helpful when deciding where to go or who delivered.  The location was perfect and close to hop the subway to Times Square, Central Park, Downtown or B{\ldots}   
+          198733  As soon as Jason opened the door, I've felt like meeting a friend and not a stranger. He has a wonderful personality so that you feel comfortable and welcomed immediately.  The apartment was as described and there have been no unfriendly surprises. The location is perfect to explore the city! Jason was always helpful, told me a good bakery store and shared his wisdom with me in our morning/evening talks.  It did not take me long and I've felt like home at his apartment. I even became kind of friends with his cat Marley; she's a character!  Next time I'll be in New York, I definitely try to{\ldots}   
+          19290                                                                 This was my 2nd time staying at Ruth's charming studio apartment. The terrace and the location cannot be beat; they are my two favorite things about the apartment that warranted a return visit.  The 72nd subway stop is minutes away, and the outdoor space for a cup of coffee in the morning and a glass of wine at night is perfectly lovely.  Ruth is always a very gracious host - a nice combination of being helpful and available but not intrusive. :)  Thanks, Ruth, for another fabulous stay!  I so appreciated the opportunity to return!   
+          241254                                                                                                                                                     Our time in NYC was all the more enjoyable getting to stay in the best apartment in the heart of the Upper East Side! We were so sad that we didn't get to actually meet Ross and Ragan in person, but they were readily available to answer any and all questions we had. The place is just like the pictures and we loved getting to feel what reality is like living in the city. We are hoping to make plans to return to NYC and would love to stay here again!   
+          169427  The apartment is lovely - clean and in a great location. Tanya did all the artwork in the apartment herself so there are paintings decorating the apartment walls that were a great touch. I can't speak for the other guest rooms, but I stayed in the "Charming" room which had a comfortable bed. I was only in the apartment to sleep since I was out all day, but Tanya was very fast in answering my questions via email (usually within several minutes!). I also loved how the location was just a few minutes walk from my favorite pizza place Lombardis. Unfortunately she was out of town for most of th{\ldots}   
+          429947                                                                                            Nour's place was extremely clean and simple, which was great as it was not cluttered with things you do not need.  All the basics were there.  Location is perfect.  He was very kind, quick with responses, left snacks for us, gave us recommendations.  The bedding was very comfortable. There was a closet for hanging clothes and a table with 2 drawers for storage.  The room decoration was just like the picture. The bathroom was very clean and had a tub w/shower head.  Would stay there again in a heart beat.   
+          291742  I highly recommend this place to everyone. It was my first time using Airbnb and my first time in NYC. There was a lot to be intimidated by on my end. However, this part made the whole trip feel much smoother. His place is clean, the bathroom is large, the neighborhood is quiet, I felt safe, it was close to a major subway line, and Fabien is very nice and really hospitable. He was so friendly and accommodating.  One of the major things I was looking for in a place was price and location. Since it was our first time in NYC we wanted to do all the major tourist things, which the majority are{\ldots}   
+          123178                                                                                                                                        Matteo wasn't just a host, he was like a big brother to me and my friend during our stay. We love him, his place, and his taste in music and design! We stayed for 3 weeks and was so fond of him and the place, it was so hard to say goodbye!  The room is clean and so comfortable, the kitchen is fully equiped, the living room is lovely and it is very near to the subway too.  Highly recommend this place if you want a warm trip in NYC, it was really worth the price.   
+          165586                                                                       Highly recommend this place - just make sure as you're good with the 6 flights of stairs to lead you to the top! I love the location and local neighborhood of this place, it's very lively and you can find anything walking distance. The climb up makes the apartment quiet, and I enjoyed relaxing in the kitchen with the sun pouring in the morning and also in the bedroom.  Apartment is clean, comfortable bed, friendly and respectable and quiet roommate. Great, quick and easy communication to coordinate keys. Stay here and enjoy!   
+          203964                                                                                            My family and I stayed in the apartment for 5 days. It is like it appears in the photos. Confortable for 4 people, clean, with all the comforts. There weren't the sheets for the second bed (anyway there was a blanket) and Jay apologized for the lack. The apartment is 15 minutes on foot from the subway station (3 streets and 3 avenues). In the neighborhood there are a lot of markets.  Jay was very kind, helpful and he answered all our requests.  I definitely suggest this apatment for your holidays in NYC.   
+          238782  Just returned from a fab weekend in New York staying at this lovely apartment in Gramercy. Super convenient for everywhere, walking distance to midtown shops (20mins), lots of great bars nearby \& subway station about 5mins away. Beautiful apartment, everything looked brand new \& sparkling clean. Lovely stone feature wall, very NY! 2 bathrooms which is a huge bonus. Comfortable beds \& lots of wardrobe space. Even a private outdoor patio area! TVs \& all appliances you could need although we ate out you could easily cater in, everything you need is there with convenient supermarkets nearby fo{\ldots}   
+          250748                                                                                                             The location is convenient, bus stop is on the side. The room is spacious and the mattress is comfortable. The only problem I had is the room temperature. I stayed there for three nights, the first two night there is no AC on, so I felt a little bit freeze in the evening，and the third night，the A/C is on， which makes it super hot in the room me and I can't turn them off. The only thing I can do is to open the window to cool down the room. Except for this prob, I'd say everything is cool.   
+          294123                                                                                                                                                                Very clean, lovely place in an awesome location. I love China town and it is actually in a very quite street. The 2 roommates are abaolute dears as well and great to talk to. However the room is so small that I could open my suitcase properly and sadly there was barely any storage space. The bed is very large with a lot of very comfortable pillows. I would recommend staying here, but only as a single person and not with a lot of luggage.   
+          111796  Steve and Palm are wonderful!   Everything was great.   I was there for one month and was completely comfortable and welcome. Most of the time I was in the house I was alone there and even then we managed to became friends very easily! They are a very nice couple.  They have airconditioner, and during the summer in NYC it was completely necessary.   The neighborhood is the best I could ever choose great nightlife, great restaurants(with great prices!), bars, bookshops, parks and subways. And their apartment is right in the perfect spot.  Loved my stay. Would definetly indicate (actually al{\ldots}   
+          274232                                                                We had a great time staying at Tom \& Emma's place. The roof was a really nice addition to the stay. We had a visit from one of the neighbors on arrival that was unwelcoming (he knew we were Airbnbing), but we never heard from him again. The rest of the neighbors were welcoming and friendly. Tourists can access the 2/3 lines and be in Time Square in \textasciitilde{}20 minutes. I preferred walking 126th to the train on my commute as it was less busy. Harlem is wonderful and lively, we loved dining on Malcolm X Boulevard. Their spot has 3 PokeStops.   
+          113579                                                                                                                            Nice small apartment, very clean. Great communication with the host, she got back to us right away and was able to check us in for under 3 hours, from the booking time. A bit of a hike from a subway, but when you get there it's only a short ride to the main attractions. Neighborhood wasn't amazing and didn't feel quite safe to walk around with young kids. I didn't think it was too bad, but my husband hated the location. Ok to spend the night when you traveling on a budget.   
+          {\ldots}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         {\ldots}   
+          319605                                                                                It was a wonderful experience with kerry, excellent communication, always outstanding, everything well created and very professional, the studio very clean and beautiful, very centric no noise in the end had a great time, his door man with his security, no words one jewel if I return the contact I swear, 3 streets have the subway, and the rest is yours, pizzerias markets, in the building with starbucks in anyway everything is there, thanks kerry :) do not miss this opportunity I assure you that you will do very well   
+          207270  First off, Katherine was great. Really quick to respond to messages, and check-in/check-out were incredibly easy. Plus, her breakdown of house tips was invaluable for a detail-dependent person like myself.   The apartment is in a rad spot—near tons of bars, restaurants, and shops, only a couple blocks from the nearest subway station. Just small enough inside to keep that cozy city vibe without being too tight, and her Apple TV was a nice touch, although we didn't even need it since we were out and about so much. Plus, all our attention was on Tuxedo Todd the house cat, who was the friendli{\ldots}   
+          9028    What a location. Its 5 mins walk to the 2 Av subway station, 10-12 mins walk to Soho and 5 mins walk to Chinatown. This is really ideal if you want to experience the city by day. Reina was very helpful in helping me and I wish I could have known her better due to my busy schedule. She's also very quick with response time, I almost had a panic attack in which I thought I couldn't make it to my booking but she was more than helpful and even advised me on options.   All in all, I had a great 14 days with this stay and I would recommend this place to others especially if you want to be part of{\ldots}   
+          134693  We had a nice stay in the apartment which is great located close to the highline, times square and Penn station. The apartment it self was clean and functional. The apartment was painted in some quite dark colors which we did not find super cozy. However I guess this is just a matter of preference, so some may find this very nice. The host was very flexible regarding our check-in/check out time and supplied us with some info about the local area such as grocery stores, restuarant, etc. which was nice. All in all we can not complain. We had a nice stay and the apartment was pretty much as e{\ldots}   
+          237619  We were the lucky first occupants of this lovely, spacious, clean and well situated apartment. John greeted us himself and we were very pleasantly surprised - the photos on Airbnb do not do justice to this two bedroom apartment that is only 5 mins from Times Square and 2 mins from Restaurant Row.  The building looks recently renovated and our ground floor apartment certainly was. Large, airy rooms that are spotlessly clean and well equipped with a full kitchen and bathroom complete with bath tub/shower over. The spacious master bedroom is very light, it has three sets of windows and the se{\ldots}   
+          163161            I got the run around on finding the key and being let into the unit. The host was out of the country, the person she left in charge also ended up being out of the country. The person she left in charge gave the key to a friend who was suppose to leave it for us in a pizza shop. The key never made and we were stuck out in the cold, in Harlem (the non-gentrified side), at 10 pm. We didn't get into the unit for an hour and a half when finally the host called the janitor of the building to let us in. Was my experience an anomaly? Perhaps, but I definitely wouldn't use this person again.   
+          361905                                                                                                                                          It was a really cozy apartment. We really enjoyed our stay at David’s place. The location is good, not too central - the noise is big issue, but close to most places you want to go. David has provided almost everything you’ll need during your stay, if not the 24hr store is just 2mins walk away.  The only concern would be no air con, we had a few wet but hot days. Made it hard to fall asleep and very humid too.  Overall was a great host. Will highly recommend!   
+          275742                     Everything about our stay at Lee's place was simply perfect.  I could not imagine a more perfect host.  Great communication from the very beginning. Lee was super kind and very helpful , offered help and was responsive right away.  The location of his apartment is FANTASTIC and the apartment itself was very clean and extremely comfortable.  It was truly a pleasure staying there.  Thank you so much Lee for making our trip to NYC unforgettable.  I will not even look into hotels next time we wanna go to NYC.  I will look for your apartment again.  Thanks! You are an A+ host!!!   
+          105680                                                                                                                                                                                 I had such a great stay at Michelles place! The place is very warm and cozy with a great location close to the subway with easy connections to JFK and Newark airports. Best of all was meeting Michelle who was a fabulous host, she is very open, sweet and welcoming and made me feel right at home. I would definitely like to stay with Michelle again when I visit New York again, and I highly recommend others to do the same :)   
+          243274                                                                                                                                                                                     If you like the east village scene then this is a great place to stay.We slept well here-comfy beds and pretty quite street considering it is centrally located.Not many people seem to use this street as a through way.Relaxing place to hang out in when you just wanna get off the streets for a bit. Up one flight of stairs. Will try to stay here again next time we come to nyc. Ben and Ariel were good with communication.   
+          40109   We vere a family of four staying in Davids apartment for nine days. It was a perfect place to stay. Near by everything and still quite. New York was very hot at the moment, and the AC functioned. The apartment was spacious. Our two teenagers could very well stay in the smallest bedroom. The apartment is in the 5.floor and had a lot of light. It is charming and reminded me of my student days though a bit more comfortable. The kitchen was ok. We did not make dinner there but breakfast and small meals. The steps can be a problem but it was ok for us. The nighborhood is grate! Lots of nice res{\ldots}   
+          40869   If we had to resume our stay to one word, it would have to be: disappointed. Although the location lived up to its expectation (nice neighborhood with plenty of new trendy shops/restaurants), and the apartment was actually more spacious than we imagined, there were many things that made the experience unpleasant. -We arrived at check-in on time and had to wait more than two hours to get the keys, while they kept telling us it would be just 10 more minutes{\ldots} - On arriving into the apartment, we smelled some gas, which turns out was leaking from the gas stove. When I started feeling a light{\ldots}   
+          56451   Abby's place was in an interesting location, filled with small taquerias and empanada shops. Its close to the subway, but it takes about forty minutes to get downtown. It would have been nice to have some closet or drawer space to store our stuff while there, as it can get crowded. The cat Gretchen moved between moments of friendliness and (weird) aggression. As I reached out to grab my jacket next to her she scratched my hand. Also frustrating--though this seemed like an exception--was the fact she accidentally smeared poop on our bed (there was luckily a change of sheets in the closet). {\ldots}   
+          75336   Sabrina De Vanna:  I had to write some of my comments on your rental apartment.  1. Your apartment is leaking badly when rain. I have to put a buckle and a towel under the big leaking. I am just a tenant ; not responsible to help your leaking roof. You told me the apartment is leaking for 6 months. Why you did not disclose this information in the airbnub advertisement ?  2. You advertised your Apartment has an oven for cooking but you piled so much staffs on a small table in front of the oven. your oven is not accessible .   3. In 3 weeks, you did not provide me with a new sheet and a new {\ldots}   
+          81939   Great location and a very nice apartment, They guys are nice we only saw them for 2 minutes our whole stay.  The bedroom is Small, for 2 it was very tight.  But overall the apartment was clean and inviting and location was key for us.  It is only on the 4th floor so bring ear plugs it is LOUD and Noisy.  Enjoy NYC!  Watch out after posting my review I received harassing emails and texts from the owners!  He has a temper and unless you write a rave review he gets mad and threatening{\ldots} and my review was honest and nice, the guest bedroom is loud with street noise..we had to have ear plugs e{\ldots}   
+          83336   Had mixed feelings about the place. The neighbor welcomed us in and was very friendly. We were 4 to stay at Isabelle's apart for 3 nights. The place is close to the subway system, near bars \& restaurants. On the downside, the shower wasn't fully functional and the kitchen sink was not working properly.  I know it is NY and you can't escape the noise, but the location was pretty noisy compared to another place we stayed at on 19th street. If you don't go out at night, you will hear the people partying below along with the traffic. If you do go out at night, the construction across the city {\ldots}   
+          115888  Pros: - have the apartment to yourself - minimal and chill - plenty of drawers and dressers - microwave, fridge, freezer, dishes, utensils - walk-in closet - comfortable bed and pillows - airconditioner and fan - wifi - TVs - two blocks from the A train  Cons: - host falsely accused me of having others stayover and swindle extra money from me - extremely dusty floors, can't walk barefooted or with socks - dusty and trash under bed, dressers, couch - stains on pillow cases and sheets - loud noise from neighbor playing music - toilet seat is loosely screwed/defective - no warm or hot water i{\ldots}   
+          123795                                                  Having never met Alessandro it is difficult to rate the host! We were met by a maid who just handed us the keys and didn't explain anything about the apt. The apt was very clean but lacked amenities such as soap in the shower \& shampoo. Since it is on the 1st floor and close to the street it is quite noisy due to the restaurants \& bars downstairs. The sofa bed is very uncomfortable There was no possible way to extend check out time as Alessandro booked another guest the same day we were leaving. Its obvious that this is a business for the host !   
+          139734  Overall, a fine well-furnished apartment in a great location with a nice host. Pros: 1) perfect location in the very heart of NYC close to subway and tons of places to shop and eat around 2) atmosphere – the building is a classic NYC walkup, in good condition, and it's only one flight of stairs to the apartment 3) the apartment itself is well-designed, organized and comfortable 4) no windows to the street side, so very quiet 5) clean, although not impeccably so (see below) 6) more reasonably (or rather, less unreasonably) priced than many other comparable properties 7) flexible cancellatio{\ldots}   
+          171655                                     My girlfriend and I were staying in Leonardo's place for two weeks. It was a great experience for us. The location is perfect: food, grocery, subway, sites - everything is very close. The apartment in very small, but there is enough space for a couple and you will probably spend most of your time out. Sometimes it gets noisy and you may hear neighbors from upstairs walking in their apartment or main door opening/closing. However it is not that bad and I would definitely recommend this place to stay. Everything went smoothly with Leonardo, he is a great host.   
+          194377  I really have a hard time reviewing our stay at Yana’s. On the one hand, Yana is a very nice person. It is fun talking to her and she makes you feel welcome. But as much as I want to give her a five star review I just cannot.  At first sight the apartment looks very clean, but it's actually just cleaned superficially. It looks clean but touching it makes you realize it is not as clean as you might have thought. They underside of the toilet seat was not cleaned at all, it was not white. Although the cat George is very nice and fun to play with, be aware he can be very annoying and dirty too{\ldots}   
+          232875  I put my family up at Tomas's place, big mistake. It was a terrible walk up through dirty halls filled with pot smoke. I had my parents and sister with two kids, so it was not appropriate.  The apartment is extremely noisy and unbearable for them to sleep, plus the neighbors party till weeeeee hours.  Tomas also charged me way too much for what he offers and addition charged me for a toddler? I don't recommend this to anyone that wants a relaxing space.  If you stay up all night, then this is the perfect spot for you.  Be in great shape because the walk up is steep and slippery.  I give it{\ldots}   
+          234212                                                                                                                                                     Me and my boyfriend stayed at Tom's place for 5 nights. The apartment was clean, true to the pictures and had everything we needed as well as a bit more. Tom was very responsive, helpful and nice. Our only problem was that although the block where the apartment was situated felt safe, the 5min walk to the subway did not. But, as long as you won't have to walk alone during nighttime it doesn't really matter and besides that everything was wonderful!   
+          236649  Unparalleled location if you come to town for broadway shows or general site seeing. Right in the heart of the best part of NYC. Jixxy was very welcoming and exceedingly helpful. That said, I do believe the cleanliness could have been better. The apartment is quite old so just be prepared that things like the shower are a little grungy, bathroom ceiling would leak periodically, and other minor issues. I would absolutely recommend a dtay here given the value for being in the perfect location. We didn't spend much time inside, so it didn't bother us. Jixxy is a great host and made herself re{\ldots}   
+          246762                                                                                                                                                        You may be amused or even alarmed by everyone's comments praising the host to some heavenly level as to diminish how beautiful the place is. I assure you, those praises are well-deserved.   Close to 110st Cathedral station on the west side, going down to tribeca and West village takes no more than half an hour.   Also, I believe I am also obliged to praise MaElena's larger than life hospitality that comes without impurity. She is awesome indeed.   
+          288696                                               Pros: Apartment as advertised! - Michael is a great host: meets you upon arrival, very cordial, accessible, and accommodating - Apartment feels like a home: very cozy and comfortable, and plenty of space for 4 people - Convenient location: easy walk to Times Square, the subway, many restaurants, etc  Con (only one):  - If you're a light sleeper, this might not be the place for you. Building is located on the corner of a street intersection. Also, floors, doors, and stairs are a bit creaky, but keep in (Website hidden by Airbnb) a historic building!   
+          310802       This accommodation was really old and crusty. There were stains on the couch and bedsheets! Some mould in the bathroom too which is likely age but still not entirely clean. Also the toilet didn't flesh properly. All one wants in accommodation is usually cleanliness and for things to work. Wifi didn't work but that is likely the ISP not the accommodation itself. The place is also very noisy and poorly insulated, which means on a hot day the aircon is not effective at all. This place maybe okay value by NY "standards" but otherwise not great at all. All NY accommodation is an utter ripoff.   
+          341072  I don't know how this unit is getting great reviews, but we found it HORRENDOUS. I have stayed in Air B and B's in large cities{\ldots} Never in NY, so maybe NYC sets a pretty low bar. But this was awful. First of all, it's been represented as family friendly. The bathroom lock was broken. There was some crap on the shower curtain. There were partially used bottles of mouthwash, deodorant sticks, and get this{\ldots} KY Jelly, in the bathroom. The kitchen had partially eaten food in the fridge. The towels had stains on them. The old world window AC's were so noisy that my 5 year old couldn't even sl{\ldots}   
+          376415  LISTING DESCRIPTION The title of the listing is "Renovated Manhattan Apartment" don't be fooled by that! It is nowhere close to that.  For one it is on the border of Manhattan and East Harlem but has more of the Harlem feel.  The address we were given was incomplete and incorrect so I had to call several times and the owner's neighbor had to speak to my uber driver to get the proper address.   PHOTOS In the photos, the property is showed as being in a revived area with beautiful artwork on the street walls.  This wasn't our reality when we finally made it to the address and were met by the{\ldots}   
+          431433                                                                                                                                     When I travel all I really require is a comfortable bed and a quiet night sleep and Close proximity to transportation, this met all of these. Maya was extremely gracious and helpful during my stay and kept the apartment in tiptop shape. So much has changed since I lived in the city in the 90s and Little Italy offers so much more than I would’ve imagined. The lower Eastside is a whole Nother world I wish I could explore more and that was also so very close as well.   
+          
+                  sat\_level\_interrater  sat\_level\_afinn\_s  sat\_level\_vader\_s  \textbackslash{}
+          23431                      1                  1                  2   
+          114008                     2                  1                  2   
+          115123                     3                  1                  2   
+          163454                     3                  2                  3   
+          175135                     2                  1                  2   
+          176985                     3                  1                  2   
+          203736                     3                  2                  3   
+          209795                     3                  2                  3   
+          222834                     3                  2                  3   
+          313885                     3                  2                  3   
+          328092                     1                  1                  2   
+          247541                     3                  1                  3   
+          406409                     3                  1                  2   
+          53118                      3                  1                  3   
+          282108                     3                  1                  3   
+          198733                     3                  2                  3   
+          19290                      3                  2                  3   
+          241254                     3                  2                  3   
+          169427                     3                  2                  3   
+          429947                     3                  1                  3   
+          291742                     3                  1                  2   
+          123178                     3                  2                  3   
+          165586                     3                  2                  3   
+          203964                     3                  1                  2   
+          238782                     3                  2                  3   
+          250748                     3                  1                  2   
+          294123                     2                  2                  3   
+          111796                     3                  2                  3   
+          274232                     3                  1                  2   
+          113579                     3                  1                  2   
+          {\ldots}                      {\ldots}                {\ldots}                {\ldots}   
+          319605                     3                  3                  3   
+          207270                     3                  1                  3   
+          9028                       3                  1                  3   
+          134693                     3                  2                  3   
+          237619                     3                  2                  3   
+          163161                     1                  1                  2   
+          361905                     2                  1                  2   
+          275742                     3                  2                  2   
+          105680                     3                  2                  3   
+          243274                     3                  2                  2   
+          40109                      3                  1                  2   
+          40869                      1                  1                  2   
+          56451                      2                  1                  2   
+          75336                      1                  1                  2   
+          81939                      1                  1                  2   
+          83336                      2                  1                  2   
+          115888                     2                  1                  2   
+          123795                     2                  1                  2   
+          139734                     2                  3                  3   
+          171655                     3                  1                  2   
+          194377                     2                  1                  2   
+          232875                     1                  1                  2   
+          234212                     3                  2                  2   
+          236649                     3                  1                  3   
+          246762                     3                  2                  3   
+          288696                     3                  1                  2   
+          310802                     2                  1                  2   
+          341072                     1                  1                  2   
+          376415                     2                  1                  2   
+          431433                     3                  1                  3   
+          
+                  sat\_level\_so\_cal\_s  sat\_level\_s140\_s  sat\_level\_op\_bow\_s  \textbackslash{}
+          23431                    2                 1                   2   
+          114008                   2                 2                   2   
+          115123                   3                 2                   2   
+          163454                   2                 2                   2   
+          175135                   3                 2                   3   
+          176985                   2                 2                   2   
+          203736                   2                 2                   2   
+          209795                   2                 2                   2   
+          222834                   2                 2                   3   
+          313885                   3                 2                   2   
+          328092                   2                 2                   2   
+          247541                   2                 2                   2   
+          406409                   3                 2                   2   
+          53118                    3                 2                   2   
+          282108                   2                 2                   2   
+          198733                   3                 2                   2   
+          19290                    3                 3                   2   
+          241254                   3                 2                   2   
+          169427                   3                 2                   2   
+          429947                   3                 2                   2   
+          291742                   2                 2                   2   
+          123178                   3                 2                   2   
+          165586                   3                 3                   3   
+          203964                   2                 2                   2   
+          238782                   3                 2                   2   
+          250748                   2                 2                   2   
+          294123                   3                 2                   2   
+          111796                   3                 2                   2   
+          274232                   3                 2                   2   
+          113579                   2                 2                   2   
+          {\ldots}                    {\ldots}               {\ldots}                 {\ldots}   
+          319605                   3                 3                   2   
+          207270                   3                 2                   2   
+          9028                     3                 2                   2   
+          134693                   3                 2                   2   
+          237619                   3                 3                   2   
+          163161                   2                 2                   2   
+          361905                   3                 2                   2   
+          275742                   3                 2                   2   
+          105680                   3                 3                   2   
+          243274                   2                 2                   2   
+          40109                    2                 2                   2   
+          40869                    2                 1                   2   
+          56451                    2                 2                   2   
+          75336                    2                 2                   2   
+          81939                    2                 2                   2   
+          83336                    2                 2                   2   
+          115888                   2                 3                   2   
+          123795                   2                 2                   2   
+          139734                   2                 3                   2   
+          171655                   2                 2                   2   
+          194377                   2                 2                   2   
+          232875                   2                 2                   2   
+          234212                   2                 2                   2   
+          236649                   3                 2                   2   
+          246762                   3                 2                   2   
+          288696                   2                 2                   2   
+          310802                   2                 1                   2   
+          341072                   2                 2                   2   
+          376415                   2                 2                   2   
+          431433                   2                 2                   2   
+          
+                  sat\_level\_op\_freq\_s  
+          23431                     2  
+          114008                    2  
+          115123                    2  
+          163454                    2  
+          175135                    3  
+          176985                    2  
+          203736                    2  
+          209795                    2  
+          222834                    3  
+          313885                    2  
+          328092                    2  
+          247541                    2  
+          406409                    2  
+          53118                     2  
+          282108                    2  
+          198733                    2  
+          19290                     2  
+          241254                    2  
+          169427                    2  
+          429947                    2  
+          291742                    2  
+          123178                    2  
+          165586                    3  
+          203964                    2  
+          238782                    3  
+          250748                    2  
+          294123                    2  
+          111796                    3  
+          274232                    2  
+          113579                    2  
+          {\ldots}                     {\ldots}  
+          319605                    2  
+          207270                    2  
+          9028                      2  
+          134693                    2  
+          237619                    2  
+          163161                    2  
+          361905                    2  
+          275742                    2  
+          105680                    2  
+          243274                    2  
+          40109                     2  
+          40869                     2  
+          56451                     2  
+          75336                     2  
+          81939                     2  
+          83336                     2  
+          115888                    2  
+          123795                    2  
+          139734                    2  
+          171655                    2  
+          194377                    2  
+          232875                    2  
+          234212                    2  
+          236649                    2  
+          246762                    2  
+          288696                    2  
+          310802                    2  
+          341072                    2  
+          376415                    2  
+          431433                    2  
+          
+          [70 rows x 9 columns]
+\end{Verbatim}
+            
+    \section{Analyse sentences}\label{analyse-sentences}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}312}]:} \PY{n}{txt} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Not the first time and not the last time we}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{ll stay at Donna}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s place. She treats us better than if she were my sister! Friendly, helpful, flexible and respectful are what best describe our host. The space is in the best place and the large, clean, modern bathroom is very welcome. I should be careful of making it sound too nice because YOU may have booked the week that I want in the future!}\PY{l+s+s2}{\PYZdq{}}
+          \PY{n}{scores} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.400}\PY{p}{,} \PY{l+m+mf}{0.480}\PY{p}{,} \PY{l+m+mf}{0.764}\PY{p}{,} \PY{l+m+mf}{0.600}\PY{p}{,} \PY{l+m+mf}{0.435}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}313}]:} \PY{k+kn}{from} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{core}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k}{import} \PY{n}{HTML}
+          \PY{k+kn}{from} \PY{n+nn}{nltk}\PY{n+nn}{.}\PY{n+nn}{tokenize} \PY{k}{import} \PY{n}{sent\PYZus{}tokenize}
+          \PY{k}{def} \PY{n+nf}{analyse\PYZus{}review} \PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{scores}\PY{p}{,} \PY{n+nb}{type}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+              \PY{n}{sents} \PY{o}{=} \PY{n}{sent\PYZus{}tokenize}\PY{p}{(}\PY{n}{text}\PY{p}{)}
+              \PY{n}{out} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+              \PY{k}{if} \PY{n+nb}{type} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+                  \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{sent} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sents}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{sents}\PY{p}{)}\PY{p}{:}
+                      \PY{k}{if} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}c40909}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.2} \PY{o+ow}{and} \PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.4}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}ef8c13}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.4} \PY{o+ow}{and} \PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}ecef13}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.6} \PY{o+ow}{and} \PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.8}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}85c433}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.8}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}4a9b37}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+              \PY{k}{elif} \PY{n+nb}{type} \PY{o}{==} \PY{l+m+mi}{2}\PY{p}{:}
+                  \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{sent} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sents}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{sents}\PY{p}{)}\PY{p}{:}
+                      \PY{k}{if} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.35}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}c40909}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.35} \PY{o+ow}{and} \PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mf}{0.65}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}ecef13}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                      \PY{k}{elif} \PY{p}{(}\PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mf}{0.65}\PY{p}{)}\PY{p}{:}
+                          \PY{n}{out}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}font color=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsh{}4a9b37}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{sent} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/font\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+              \PY{k}{else}\PY{p}{:}
+                  \PY{k}{return} \PY{k+kc}{None}
+                  
+              \PY{n}{words} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}div style=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{margin: 20px;border: solid 20px;}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}\PYZlt{}p style=}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{background\PYZhy{}color:black;margin=10px;}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZgt{}\PYZlt{}b\PYZgt{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{out}\PY{p}{)} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/b\PYZgt{}\PYZlt{}/p\PYZgt{}\PYZlt{}/div\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}
+              \PY{k}{return} \PY{n}{HTML}\PY{p}{(}\PY{n}{words}\PY{p}{)}
+              
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}314}]:} \PY{n}{analyse\PYZus{}review} \PY{p}{(}\PY{n}{txt}\PY{p}{,} \PY{n}{scores}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}314}]:} <IPython.core.display.HTML object>
+\end{Verbatim}
+            
+    \section{Confusion Matrix}\label{confusion-matrix}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}315}]:} \PY{k}{def} \PY{n+nf}{create\PYZus{}confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{labels}\PY{p}{,} \PY{n}{predictions}\PY{p}{)}\PY{p}{:}
+              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{l+s+sd}{    Creates a confusion matrix that counts for each gold label how often it was labelled by what label}
+          \PY{l+s+sd}{    in the predictions.}
+          \PY{l+s+sd}{    Args:}
+          \PY{l+s+sd}{        data: a list of gold (x,y) pairs.}
+          \PY{l+s+sd}{        predictions: a list of y labels, same length and with matching order.}
+          
+          \PY{l+s+sd}{    Returns:}
+          \PY{l+s+sd}{        a `defaultdict` that maps `(gold\PYZus{}label,guess\PYZus{}label)` pairs to their prediction counts.}
+          \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+              \PY{n}{confusion} \PY{o}{=} \PY{n}{defaultdict}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+              \PY{k}{for} \PY{n}{y\PYZus{}gold}\PY{p}{,} \PY{n}{y\PYZus{}guess} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{labels}\PY{p}{,} \PY{n}{predictions}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{confusion}\PY{p}{[}\PY{p}{(}\PY{n}{y\PYZus{}gold}\PY{p}{,} \PY{n}{y\PYZus{}guess}\PY{p}{)}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+              \PY{k}{return} \PY{n}{confusion}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}316}]:} \PY{k}{def} \PY{n+nf}{evaluate}\PY{p}{(}\PY{n}{conf\PYZus{}matrix}\PY{p}{,} \PY{n}{label\PYZus{}filter}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{l+s+sd}{    Evaluate Precision, Recall and F1 based on a confusion matrix as produced by `create\PYZus{}confusion\PYZus{}matrix`.}
+          \PY{l+s+sd}{    Args:}
+          \PY{l+s+sd}{        conf\PYZus{}matrix: a confusion matrix in form of a dictionary from `(gold\PYZus{}label,guess\PYZus{}label)` pairs to counts.}
+          \PY{l+s+sd}{        label\PYZus{}filter: a set of gold labels to consider. If set to `None` all labels are considered.}
+          
+          \PY{l+s+sd}{    Returns:}
+          \PY{l+s+sd}{        Precision, Recall, F1 triple.}
+          \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+              \PY{n}{tp} \PY{o}{=} \PY{l+m+mi}{0}
+              \PY{n}{tn} \PY{o}{=} \PY{l+m+mi}{0}
+              \PY{n}{fp} \PY{o}{=} \PY{l+m+mi}{0}
+              \PY{n}{fn} \PY{o}{=} \PY{l+m+mi}{0}
+              \PY{k}{for} \PY{p}{(}\PY{n}{gold}\PY{p}{,} \PY{n}{guess}\PY{p}{)}\PY{p}{,} \PY{n}{count} \PY{o+ow}{in} \PY{n}{conf\PYZus{}matrix}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                  \PY{k}{if} \PY{n}{label\PYZus{}filter} \PY{o+ow}{is} \PY{k+kc}{None} \PY{o+ow}{or} \PY{n}{gold} \PY{o+ow}{in} \PY{n}{label\PYZus{}filter} \PY{o+ow}{or} \PY{n}{guess} \PY{o+ow}{in} \PY{n}{label\PYZus{}filter}\PY{p}{:}
+                      \PY{k}{if} \PY{n}{gold} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{and} \PY{n}{guess} \PY{o}{!=} \PY{n}{gold}\PY{p}{:}
+                          \PY{n}{fp} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+                      \PY{k}{elif} \PY{n}{gold} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{and} \PY{n}{guess} \PY{o}{==} \PY{n}{gold}\PY{p}{:}
+                          \PY{n}{tn} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+                      \PY{k}{elif} \PY{n}{gold} \PY{o}{!=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{and} \PY{n}{guess} \PY{o}{==} \PY{n}{gold}\PY{p}{:}
+                          \PY{n}{tp} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+                      \PY{k}{elif} \PY{n}{gold} \PY{o}{!=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{and} \PY{n}{guess} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                          \PY{n}{fn} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+                      \PY{k}{else}\PY{p}{:}  \PY{c+c1}{\PYZsh{} both gold and guess are not\PYZhy{}None, but different}
+                          \PY{n}{fp} \PY{o}{+}\PY{o}{=} \PY{n}{count} \PY{k}{if} \PY{n}{label\PYZus{}filter} \PY{o+ow}{is} \PY{k+kc}{None} \PY{o+ow}{or} \PY{n}{guess} \PY{o+ow}{in} \PY{n}{label\PYZus{}filter} \PY{k}{else} \PY{l+m+mi}{0}
+                          \PY{n}{fn} \PY{o}{+}\PY{o}{=} \PY{n}{count} \PY{k}{if} \PY{n}{label\PYZus{}filter} \PY{o+ow}{is} \PY{k+kc}{None} \PY{o+ow}{or} \PY{n}{gold} \PY{o+ow}{in} \PY{n}{label\PYZus{}filter} \PY{k}{else} \PY{l+m+mi}{0}
+              \PY{n}{prec} \PY{o}{=} \PY{n}{tp} \PY{o}{/} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fp}\PY{p}{)} \PY{k}{if} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fp}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{k}{else} \PY{l+m+mf}{0.0}
+              \PY{n}{recall} \PY{o}{=} \PY{n}{tp} \PY{o}{/} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fn}\PY{p}{)} \PY{k}{if} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fn}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{k}{else} \PY{l+m+mf}{0.0}
+              \PY{n}{f1} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{prec} \PY{o}{*} \PY{n}{recall} \PY{o}{/} \PY{p}{(}\PY{n}{prec} \PY{o}{+} \PY{n}{recall}\PY{p}{)} \PY{k}{if} \PY{n}{prec} \PY{o}{*} \PY{n}{recall} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{k}{else} \PY{l+m+mf}{0.0}
+              \PY{k}{return} \PY{n}{prec}\PY{p}{,} \PY{n}{recall}\PY{p}{,} \PY{n}{f1}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}317}]:} \PY{k}{def} \PY{n+nf}{full\PYZus{}evaluation\PYZus{}table}\PY{p}{(}\PY{n}{confusion\PYZus{}matrix}\PY{p}{)}\PY{p}{:}
+              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{l+s+sd}{    Produce a pandas data\PYZhy{}frame with Precision, F1 and Recall for all labels.}
+          \PY{l+s+sd}{    Args:}
+          \PY{l+s+sd}{        confusion\PYZus{}matrix: the confusion matrix to calculate metrics from.}
+          
+          \PY{l+s+sd}{    Returns:}
+          \PY{l+s+sd}{        a pandas Dataframe with one row per gold label, and one more row for the aggregate of all labels.}
+          \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+              \PY{n}{labels} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{p}{\PYZob{}}\PY{n}{l} \PY{k}{for} \PY{n}{l}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n}{confusion\PYZus{}matrix}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}} \PY{o}{|} \PY{p}{\PYZob{}}\PY{n}{l} \PY{k}{for} \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{l} \PY{o+ow}{in} \PY{n}{confusion\PYZus{}matrix}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{)}
+              \PY{n}{gold\PYZus{}counts} \PY{o}{=} \PY{n}{defaultdict}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+              \PY{n}{guess\PYZus{}counts} \PY{o}{=} \PY{n}{defaultdict}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+              \PY{k}{for} \PY{p}{(}\PY{n}{gold\PYZus{}label}\PY{p}{,} \PY{n}{guess\PYZus{}label}\PY{p}{)}\PY{p}{,} \PY{n}{count} \PY{o+ow}{in} \PY{n}{confusion\PYZus{}matrix}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                  \PY{k}{if} \PY{n}{gold\PYZus{}label} \PY{o}{!=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{None}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                      \PY{n}{gold\PYZus{}counts}\PY{p}{[}\PY{n}{gold\PYZus{}label}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+                      \PY{n}{gold\PYZus{}counts}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[All]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+                  \PY{k}{if} \PY{n}{guess\PYZus{}label} \PY{o}{!=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{None}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                      \PY{n}{guess\PYZus{}counts}\PY{p}{[}\PY{n}{guess\PYZus{}label}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+                      \PY{n}{guess\PYZus{}counts}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[All]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{n}{count}
+          
+              \PY{n}{result\PYZus{}table} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+              \PY{k}{for} \PY{n}{label} \PY{o+ow}{in} \PY{n}{labels}\PY{p}{:}
+                  \PY{k}{if} \PY{n}{label} \PY{o}{!=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{None}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                      \PY{n}{result\PYZus{}table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{label}\PY{p}{,} \PY{n}{gold\PYZus{}counts}\PY{p}{[}\PY{n}{label}\PY{p}{]}\PY{p}{,} \PY{n}{guess\PYZus{}counts}\PY{p}{[}\PY{n}{label}\PY{p}{]}\PY{p}{,} \PY{o}{*}\PY{n}{evaluate}\PY{p}{(}\PY{n}{confusion\PYZus{}matrix}\PY{p}{,} \PY{p}{\PYZob{}}\PY{n}{label}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+          
+              \PY{n}{result\PYZus{}table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[All]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gold\PYZus{}counts}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[All]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{guess\PYZus{}counts}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[All]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{o}{*}\PY{n}{evaluate}\PY{p}{(}\PY{n}{confusion\PYZus{}matrix}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+              \PY{k}{return} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result\PYZus{}table}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Gold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Guess}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Precision}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recall}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}318}]:} \PY{k}{def} \PY{n+nf}{plot\PYZus{}confusion\PYZus{}matrix\PYZus{}dict}\PY{p}{(}\PY{n}{matrix\PYZus{}dict}\PY{p}{,} \PY{n}{rotation}\PY{o}{=}\PY{l+m+mi}{45}\PY{p}{,} \PY{n}{outside\PYZus{}label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+              \PY{n}{labels} \PY{o}{=} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{y} \PY{k}{for} \PY{n}{y}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n}{matrix\PYZus{}dict}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{]} \PY{o}{+} \PY{p}{[}\PY{n}{y} \PY{k}{for} \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{y} \PY{o+ow}{in} \PY{n}{matrix\PYZus{}dict}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+              \PY{n}{sorted\PYZus{}labels} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{labels}\PY{p}{)}
+              \PY{n}{matrix} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sorted\PYZus{}labels}\PY{p}{)}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{sorted\PYZus{}labels}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+              \PY{k}{for} \PY{n}{i1}\PY{p}{,} \PY{n}{y1} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{sorted\PYZus{}labels}\PY{p}{)}\PY{p}{:}
+                  \PY{k}{for} \PY{n}{i2}\PY{p}{,} \PY{n}{y2} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{sorted\PYZus{}labels}\PY{p}{)}\PY{p}{:}
+                      \PY{k}{if} \PY{n}{y1} \PY{o}{!=} \PY{n}{outside\PYZus{}label} \PY{o+ow}{or} \PY{n}{y2} \PY{o}{!=} \PY{n}{outside\PYZus{}label}\PY{p}{:}
+                          \PY{n}{matrix}\PY{p}{[}\PY{n}{i1}\PY{p}{,} \PY{n}{i2}\PY{p}{]} \PY{o}{=} \PY{n}{matrix\PYZus{}dict}\PY{p}{[}\PY{n}{y1}\PY{p}{,} \PY{n}{y2}\PY{p}{]}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{matrix}\PY{p}{,} \PY{n}{interpolation}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nearest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{Blues}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{colorbar}\PY{p}{(}\PY{p}{)}
+              \PY{n}{tick\PYZus{}marks} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sorted\PYZus{}labels}\PY{p}{)}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{tick\PYZus{}marks}\PY{p}{,} \PY{n}{sorted\PYZus{}labels}\PY{p}{,} \PY{n}{rotation}\PY{o}{=}\PY{n}{rotation}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{yticks}\PY{p}{(}\PY{n}{tick\PYZus{}marks}\PY{p}{,} \PY{n}{sorted\PYZus{}labels}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}319}]:} \PY{n}{cm} \PY{o}{=} \PY{n}{create\PYZus{}confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{overall\PYZus{}lvl\PYZus{}tbl}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sat\PYZus{}level\PYZus{}interrater}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{overall\PYZus{}lvl\PYZus{}tbl}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sat\PYZus{}level\PYZus{}op\PYZus{}bow\PYZus{}o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}320}]:} \PY{n}{plot\PYZus{}confusion\PYZus{}matrix\PYZus{}dict}\PY{p}{(}\PY{n}{cm}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_87_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}321}]:} \PY{n}{evaluate}\PY{p}{(}\PY{n}{cm}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}321}]:} (0.34285714285714286, 0.34285714285714286, 0.34285714285714286)
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}322}]:} \PY{n}{full\PYZus{}evaluation\PYZus{}table}\PY{p}{(}\PY{n}{cm}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}322}]:}    Label  Gold  Guess  Precision    Recall        F1
+          0      1     8     17   0.470588  1.000000  0.640000
+          1      2    14     38   0.078947  0.214286  0.115385
+          2      3    48     15   0.866667  0.270833  0.412698
+          3  [All]    70     70   0.342857  0.342857  0.342857
+\end{Verbatim}
+            
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

@@ -41,8 +41,15 @@ def clear_dir(directory):
 DB_NAME = 'airbnb'
 
 CONNECT_SQL_STRING = 'mysql+mysqlconnector://root:airbnb2018@localhost/'
+CONNECT_SQLALCHEMY_STRING = 'mysql+pymysql://root:airbnb2018@localhost/airbnb?charset=utf8mb4'
 # root directory for all data
 DATA_DIR = get_dir('../Data/')
+SCRAPER_DIR = get_dir('/Users/lynraybarends/eclipse-workspace/airbnb-info-host')
+RAW_DATA_DIR = os.path.join('..', DATA_DIR, 'raw')
+RAW_GUESTS_DIR = os.path.join(RAW_DATA_DIR, 'guests')
+RAW_LISTINGS_DIR = os.path.join(RAW_DATA_DIR, 'listings.csv')
+RAW_REVIEWS_DIR = os.path.join(RAW_DATA_DIR, 'reviews.csv')
+
 # coll
 listing_cols = [ 'id', 'host_id', 'name', 'summary', 'space','description','neighborhood_overview','notes',
             'transit', 'access', 'interaction', 'house_rules', 'picture_url', 'street', 'neighbourhood_cleansed',
@@ -54,23 +61,23 @@ listing_cols = [ 'id', 'host_id', 'name', 'summary', 'space','description','neig
             'review_scores_accuracy', 'review_scores_cleanliness', 'review_scores_checkin', 'review_scores_communication',
             'review_scores_location', 'review_scores_value', 'instant_bookable', 'is_business_travel_ready',
             'cancellation_policy', 'require_guest_profile_picture', 'require_guest_phone_verification',
-            'calculated_host_listings_count', 'reviews_per_month']
+            'reviews_per_month']
 
 host_cols = [ 'host_id', 'host_name', 'host_since', 'host_location','host_about',
             'host_response_time', 'host_response_rate',
-            'host_is_superhost', 'host_picture_url', 'host_neighbourhood',
+            'host_is_superhost', 'host_neighbourhood',
             'host_listings_count', 'host_total_listings_count', 'host_verifications',
-            'host_has_profile_pic', 'host_identity_verified']
+            'host_has_profile_pic', 'host_identity_verified', 'calculated_host_listings_count']
 review_cols = ['listing_id', 'id', 'date', 'reviewer_id', 'comments']
 
 TABLES = {
     'listings' : (
         "CREATE TABLE listings (\
             idListing int(11) NOT NULL AUTO_INCREMENT,\
-            id varchar(45) DEFAULT NULL,\
+            id varchar(45) NOT NULL,\
             host_id varchar(45) NOT NULL,\
             name text(2000) DEFAULT NULL,\
-            summary text(2000) DEFAULT NULL,\
+            summary varchar(2000) DEFAULT NULL,\
             space text(2000) DEFAULT NULL,\
             description text(2000) DEFAULT NULL,\
             neighborhood_overview text(2000) DEFAULT NULL,\
@@ -121,17 +128,16 @@ TABLES = {
             review_scores_value double DEFAULT NULL,\
             instant_bookable varchar(1) DEFAULT NULL,\
             is_business_travel_ready varchar(1) DEFAULT NULL,\
-            cancellation_policy varchar(20) DEFAULT NULL,\
+            cancellation_policy varchar(200) DEFAULT NULL,\
             require_guest_profile_picture varchar(1) DEFAULT NULL,\
             require_guest_phone_verification varchar(1) DEFAULT NULL,\
-            calculated_host_listings_count int(20) DEFAULT NULL,\
             reviews_per_month double DEFAULT NULL,\
             PRIMARY KEY (idListing),\
             KEY secondary (id)\
         ) ENGINE=InnoDB AUTO_INCREMENT=0"),
     'hosts': (
         "CREATE TABLE hosts (\
-            id int(11) NOT NULL DEFAULT '0',\
+            id int(11) NOT NULL,\
             name varchar(200) DEFAULT NULL,\
             since varchar(15) DEFAULT NULL,\
             location varchar(500) DEFAULT NULL,\
@@ -139,21 +145,22 @@ TABLES = {
             response_time varchar(50) DEFAULT NULL,\
             response_rate varchar(4) DEFAULT NULL,\
             is_superhost varchar(1) DEFAULT NULL,\
-            picture_url varchar(200) DEFAULT NULL,\
             neighbourhood varchar(2000) DEFAULT NULL,\
             listings_count double DEFAULT NULL,\
             total_listings_count double DEFAULT NULL,\
             verifications varchar(2000) DEFAULT NULL,\
             has_profile_pic varchar(1) DEFAULT NULL,\
-            identity_verified varchar(1)\
+            identity_verified varchar(1),\
+            calculated_listings_count int(20) DEFAULT NULL\
         ) ENGINE=InnoDB;"),
     'guests': (
         "CREATE TABLE guests (\
             idGuest int(11) NOT NULL AUTO_INCREMENT,\
-            id varchar(200) DEFAULT NULL ,\
+            id varchar(200) NOT NULL ,\
             name varchar(200) DEFAULT NULL ,\
             city varchar(200) DEFAULT NULL ,\
-            membershipDate varchar(200) DEFAULT NULL ,\
+            membershipMonth varchar(20) DEFAULT NULL ,\
+            membershipYear varchar(4) DEFAULT NULL ,\
             superhost varchar(5) DEFAULT NULL ,\
             verified varchar(5) DEFAULT NULL ,\
             description text(20000) DEFAULT NULL ,\
@@ -163,20 +170,36 @@ TABLES = {
             languages varchar(2000) DEFAULT NULL ,\
             reviewNumber int(25) DEFAULT NULL ,\
             guideNumber int(25) DEFAULT NULL ,\
-            whishListNumber int(200) DEFAULT NULL,\
+            wishListNumber int(200) DEFAULT NULL,\
             PRIMARY KEY (idGuest)\
         ) ENGINE=InnoDB AUTO_INCREMENT=0"),
     'reviews': (
         "CREATE TABLE reviews (\
             idReview int(11) NOT NULL AUTO_INCREMENT,\
-            id varchar(45) DEFAULT NULL,\
+            id varchar(45) NOT NULL ,\
             date varchar(200) DEFAULT NULL,\
             reviewer_id varchar(45) DEFAULT NULL,\
             listing_id varchar(45) DEFAULT NULL,\
             recipient_id varchar(45) DEFAULT NULL,\
             comments text(10000) DEFAULT NULL,\
+            hostCancelled varchar(1) DEFAULT NULL,\
             PRIMARY KEY (idReview),\
             KEY secondary (reviewer_id),\
             KEY third (id)\
         ) ENGINE=InnoDB AUTO_INCREMENT=0")
     }
+
+months_translated = {
+    'agosto': 'August',
+    'aprile': 'April',
+    'dicembre': 'December',
+    'febbraio': 'February',
+    'gennaio': 'January',
+    'giugno': 'June',
+    'luglio': 'July',
+    'maggio': 'May',
+    'marzo': 'March',
+    'novembre': 'November',
+    'ottobre': 'October',
+    'settembre': 'September'
+}
