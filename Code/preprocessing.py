@@ -69,8 +69,8 @@ def clean_guests(guests):
     guests['guideNumber'] = [int(i) if i is not None and type(i) != int else i for i in guests['guideNumber']]
 
     #Remove records where guests have no membershipDate
-    print('Removing records where guests have no membershipDate', len(guests[guests['membershipDate'] == 'null']), ' records')
-    guests = guests[guests['membershipDate'] != 'null']
+    print('Removing records where guests have no membershipDate', len(guests[(guests['membershipDate'] == 'null') | (guests['membershipDate'].isnull())]), ' records')
+    guests = guests[(guests['membershipDate'] != 'null') & (~guests['membershipDate'].isnull())]
     print('Updated number of guest records:', len(guests))
 
     print('Split membershipDate into membershipMonth and membershipYear')
@@ -140,9 +140,23 @@ def translate_guests(guests):
     else:
         trans_cities = translate_list(u_cities)
     utils.save_dict_as_json(trans_cities, 'trans_cities')
-    guests['city'] = guests.city.map(lambda x: trans_cities[x] if x != None else x)
+    guests['city'] = translate_cities(guests, 'city')
 
     return guests
+
+def translate_cities(tbl, col):
+    u_cities = tbl[col].unique()
+    print("Distinct number of cities: ", len(u_cities))
+    print("Translating cities")
+    if os.path.exists('trans_cities.json'):
+        old_translations = json.load(open('trans_cities.json'))
+        new_translations = list(set(u_cities) - old_translations.keys())
+        print("Number of new translations needed for cities: ", len(new_translations))
+        trans_cities = utils.merge_two_dicts(old_translations, translate_list(new_translations)) if len(new_translations) > 0 else old_translations
+    else:
+        trans_cities = translate_list(u_cities)
+    utils.save_dict_as_json(trans_cities, 'trans_cities')
+    return tbl[col].map(lambda x: trans_cities[x] if x != None else x)
 
 def get_listing_info(raw):
     print("Retrieving %d columns for listings" % len(s.listing_cols))
@@ -198,6 +212,36 @@ def restrict_multiple_listings(hosts, listings, reviews, guests):
     print("Revised number of Retrieved Guests: %d (decreased %.2f %%)" % (len(new_retrieved_guests), utils.get_decreased_percent(new_retrieved_guests, guests)))
 
     return (new_hosts, new_listings, new_reviews, new_overall_guests, new_retrieved_guests)
+
+def restrict_number_of_reviews(hosts, listings, reviews, guests):
+
+    # Reduced Hosts
+    host_review_count = reviews.groupby('recipient_id').count()[['id']].rename(columns={'id': 'num_of_reviews'})
+    new_host_ids = set([str(i) for i in host_review_count[host_review_count['num_of_reviews'] >4].index])
+
+    # Reduced Hosts
+    new_hosts = hosts[hosts['id'].isin(new_host_ids)]
+    print("Revised number of Hosts: %d (decreased %.2f %%)" % (len(new_hosts), utils.get_decreased_percent(new_hosts, hosts)))
+
+    # Reduced Listings
+    new_listings = listings[listings['host_id'].isin(new_host_ids)]
+    print("Revised number of Listings: %d (decreased %.2f %%)" % (len(new_listings), utils.get_decreased_percent(new_listings, listings)))
+
+    # Reduced Reviews
+    new_reviews = reviews[reviews['recipient_id'].isin(new_host_ids)]
+    print("Revised number of Reviews: %d (decreased %.2f %%)" % (len(new_reviews), utils.get_decreased_percent(new_reviews, reviews)))
+
+    # Reduced Overall Guests
+    overall_guests = reviews['reviewer_id'].unique()
+    new_overall_guests = new_reviews['reviewer_id'].unique()
+    print("Revised number of Overall Guests: %d (decreased %.2f %%)" % (len(new_overall_guests), utils.get_decreased_percent(new_overall_guests, overall_guests)))
+
+    # Reduced Retrieved Guests
+    new_retrieved_guests = guests[guests['id'].isin(set(utils.convert_to_str(new_overall_guests)))]
+    print("Revised number of Retrieved Guests: %d (decreased %.2f %%)" % (len(new_retrieved_guests), utils.get_decreased_percent(new_retrieved_guests, guests)))
+
+    return (new_hosts, new_listings, new_reviews, new_overall_guests, new_retrieved_guests)
+
 
 def remove_no_reviews(hosts, listings, reviews):
 
@@ -290,16 +334,13 @@ def restrict_review_langs(hosts, listings, reviews, guests):
     # Reduced Reviews langs
     print('Removing reviews based on Language Restrictions')
 
-    agg_restrict = reviews[(reviews['google_langs'] == reviews['langdetect_langs']) & (reviews['google_langs'] == 'en')]
+    agg_restrict = reviews[(reviews['google_langs'] == reviews['langdetect_langs']) & (reviews['google_langs'] == 'en') & (reviews['google_langs_conf'] > 0.9) & (reviews['langdetect_langs_conf'] > 0.9)]
     print("-Reviews that have 'English' language detection agreements between 'langdetect' and googletrans = %d" % len(agg_restrict))
 
     unk_restrict = reviews[(reviews['google_langs'] == 'unk') & (reviews['langdetect_langs'] == 'en') & (reviews['langdetect_langs_conf'] >= 0.99)]
     print("-Reviews that contained emoticons in them preventing 'googletrans' from correct detection = %d" % len(unk_restrict))
 
-    mix_restrict = reviews[(reviews['langdetect_langs'] == 'en') & (reviews['langdetect_langs_conf'] >= 0.99) & (reviews['google_langs'].str.len() > 2) & (reviews['google_langs'].str.contains('en'))]
-    print("-Reviews that where 'googletrans' has predicted a mixture of languages, including 'en' = %d" % len(mix_restrict))
-
-    new_reviews = pd.concat([agg_restrict, unk_restrict, mix_restrict]).drop_duplicates(subset=None, inplace=False)
+    new_reviews = pd.concat([agg_restrict, unk_restrict]).drop_duplicates(subset=None, inplace=False)
     print("-Revised number of Reviews: %d (decreased %.2f %%)" % (len(new_reviews), utils.get_decreased_percent(new_reviews, reviews)))
 
     # Reduced Hosts
@@ -338,3 +379,110 @@ def build_exclusion_table(review_counts, reviews, listings, low, high):
                          str(len(new_reviews['reviewer_id'].unique())) + " (" + str(format(len(new_reviews['reviewer_id'].unique())*100/table["Pre-exclusion"][2], ".2f")) + "%)",
                          str(len(new_listings)) + " (" + str(format(len(new_listings)*100/table["Pre-exclusion"][3], ".2f")) + "%)"]
     return table
+
+def isLocation(x):
+    res = x.strip()
+    if utils.hasNumbers(res) or res == "" or res.replace(",", "").strip() == "":
+        return False
+    return True
+
+def clean_hosts_hosts(x):
+    result = re.sub(r'[\(\)]|[\\\[\\\]]','',x.replace("), (Da ", "(").replace("(Da ", "("))
+    result = [i.strip() for i in result.split("·") if isLocation(i)]
+    return result
+
+def create_visitation_table(tbl):
+    city_matches = [[r['hostId '], v] for i, r in tbl.iterrows() for v in r['hostedBy']]
+    result = pd.DataFrame(data=city_matches, columns=["hostId", "visited"])
+    result[["hostId", "visited", "min_times"]] = result.groupby(["hostId", "visited"]).size().reset_index()
+    return result[~result['hostId'].isnull()]
+
+def get_host_visitation_table(host_hosts):
+    host_hosts.is_copy = False
+    host_hosts['hostedBy'] = host_hosts[' hostedBy'].map(lambda x: clean_hosts_hosts(x))
+    return create_visitation_table(host_hosts)
+
+def clean_host_reviews(reviews):
+    print('Cleaning Review Data')
+    print('Initial number of Review records:', len(reviews))
+
+    #Trim white spaces from column names
+    print('Trimming white spaces from column names')
+    reviews = utils.trim_column_names(reviews)
+
+    #Trim white spaces from column names
+    print('Trimming white spaces ')
+    reviews = reviews.applymap(lambda x: x.strip() if type(x) is str else str(x))
+
+    # Remove Line Breaks
+    print('Cleaning up Line Breaks')
+    reviews['comments'] = reviews['comments'].map(lambda x: x.replace("\r\n", " ").replace("\n", " ").replace("\r", " "))
+
+    #
+    print('Removing records with NULL guest ids:', len(reviews[(reviews['guestId'] == 'null') & (reviews['guestId'].isnull())]), ' records')
+    reviews = reviews[(reviews['guestId'] != 'null') & (~reviews['guestId'].isnull())]
+    print('Updated number of host review records:', len(reviews))
+
+    #
+    print('Removing records with NULL host ids:', len(reviews[(reviews['hostId'] == 'null') & (reviews['hostId'].isnull())]), ' records')
+    reviews = reviews[(reviews['hostId'] != 'null') & (~reviews['hostId'].isnull())]
+    print('Updated number of host review records:', len(reviews))
+
+    #Drop duplicates
+    print("Drop duplicate records")
+    reviews = reviews.drop_duplicates()
+    print('Updated number of host review records:', len(reviews))
+
+    print('Removing records with non-numeric guest ids:')
+    reviews = reviews[reviews.guestId.apply(lambda x: x.isnumeric())]
+    print('Updated number of host review records:', len(reviews))
+
+    return reviews
+
+def rename_host_review_cols(reviews):
+    return reviews.rename(columns={'hostName': 'host_name', 'totalReviewsFromHosts': 'total_host_reviews', 'guestId':'recipient_id', 'hostId': 'reviewer_id'})
+
+def restrict_by_people_pic(pic_tbl, hosts, listings, reviews, guests):
+
+    # Reduced Hosts
+    new_host_ids = set(utils.convert_to_str(pic_tbl[pic_tbl['num_of_people_in_pic'] == 1]['id'].unique()))
+
+    # Reduced Hosts
+    new_hosts = hosts[hosts['id'].isin(new_host_ids)]
+    print("Revised number of Hosts: %d (decreased %.2f %%)" % (len(new_hosts), utils.get_decreased_percent(new_hosts, hosts)))
+
+    # Reduced Listings
+    new_listings = listings[listings['host_id'].isin(new_host_ids)]
+    print("Revised number of Listings: %d (decreased %.2f %%)" % (len(new_listings), utils.get_decreased_percent(new_listings, listings)))
+
+    # Reduced Reviews
+    new_reviews = reviews[reviews['recipient_id'].isin(new_host_ids)]
+    print("Revised number of Reviews: %d (decreased %.2f %%)" % (len(new_reviews), utils.get_decreased_percent(new_reviews, reviews)))
+
+    # Reduced Overall Guests
+    overall_guests = reviews['reviewer_id'].unique()
+    new_overall_guests = new_reviews['reviewer_id'].unique()
+    print("Revised number of Overall Guests: %d (decreased %.2f %%)" % (len(new_overall_guests), utils.get_decreased_percent(new_overall_guests, overall_guests)))
+
+    # Reduced Retrieved Guests
+    new_retrieved_guests = guests[guests['id'].isin(set(utils.convert_to_str(new_overall_guests)))]
+    print("Revised number of Retrieved Guests: %d (decreased %.2f %%)" % (len(new_retrieved_guests), utils.get_decreased_percent(new_retrieved_guests, guests)))
+
+    return (new_hosts, new_listings, new_reviews, new_overall_guests, new_retrieved_guests)
+
+def restrict_by_received_guests(hosts, listings, reviews, guests):
+
+    # Reduced Reviews
+    print('Restrict to only reviews from guests whose profile we have')
+    new_reviews = reviews[reviews['reviewer_id'].isin(guests['id'].unique())]
+    print("Revised number of Reviews: %d (decreased %.2f %%)" % (len(new_reviews), utils.get_decreased_percent(new_reviews, reviews)))
+
+    # Reduced Hosts
+    new_hosts = hosts[hosts['id'].isin(set(new_reviews['recipient_id'].astype(str)))]
+    print("Revised number of Hosts: %d (decreased %.2f %%)" % (len(new_hosts), utils.get_decreased_percent(new_hosts, hosts)))
+
+    # Reduced Listings
+    new_listings = listings[listings['id'].isin(set(new_reviews['listing_id'].astype(str)))]
+    print("Revised number of Listings: %d (decreased %.2f %%)" % (len(new_listings), utils.get_decreased_percent(new_listings, listings)))
+
+    return (new_hosts, new_listings, new_reviews)

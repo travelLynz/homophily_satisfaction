@@ -3,7 +3,7 @@ import glob
 import pandas as pd
 import indicoio
 
-indicoio.config.api_key = 'b170593a11c9ad0d814fc1e2f2d9a1f5'
+indicoio.config.api_key = 'd1fb72520ce2fe28f49121416e5acb77'
 
 def update_list(num_done, id_list):
     ids = pd.read_csv(id_list)
@@ -14,11 +14,14 @@ def update_list(num_done, id_list):
     rest.to_csv('rest.csv', index=False)
     print("Done")
 
-def get_num_of_people(img_dir, ids):
+def get_num_of_people(img_dir, no_img_dir, ids):
     num_of_people = []
     for i in ids:
         pwd = os.path.join(img_dir, str(i) +'.jpg')
-        if os.path.isfile(pwd):
+        no_pwd = os.path.join(no_img_dir, str(i) +'.jpg')
+        if os.path.isfile(no_pwd):
+            num_of_people.append(0)
+        elif os.path.isfile(pwd):
             num_of_people.append(len(indicoio.facial_localization(pwd)))
         else:
             num_of_people.append(None)

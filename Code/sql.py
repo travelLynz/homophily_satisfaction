@@ -78,8 +78,14 @@ def get_neighborhood(con, neighborhood):
 def get_hosts(con, host_ids):
     return pd.read_sql('SELECT DISTINCT * FROM hosts where id in (' + str(host_ids)[1:-1] + ');', con, chunksize=None)
 
-def get_reviews(con, listing_ids):
-    return pd.read_sql('SELECT DISTINCT * FROM reviews where listing_id in (' + str(listing_ids)[1:-1] + ');', con, chunksize=None)
+def get_hosts_trips(con, host_ids):
+    return pd.read_sql('SELECT DISTINCT * FROM hostTrips where hostId in (' + str(host_ids)[1:-1] + ');', con, chunksize=None)
+
+def get_guest_reviews(con, listing_ids):
+    return pd.read_sql('SELECT DISTINCT * FROM guestReviews where listing_id in (' + str(listing_ids)[1:-1] + ');', con, chunksize=None)
+
+def get_host_reviews(con):
+    return pd.read_sql_table('hostReviews', con, chunksize=None)
 
 def get_guests(con):
     return pd.read_sql_table('guests', con, chunksize=None)
@@ -93,7 +99,7 @@ def get_manhattan_data():
 
     #Get Reviews
     listing_ids = set(listings['id'])
-    reviews = get_reviews(engine, listing_ids)
+    reviews = get_guest_reviews(engine, listing_ids)
     print('Retrieved %d Manhattan reviews' % len(reviews))
 
     #Get Hosts
@@ -103,12 +109,18 @@ def get_manhattan_data():
     hosts_with_reviews = reviews['recipient_id'].unique()
     print('Retrieved only %d (%.2f%%) Manhattan hosts with reviews' % (len(hosts_with_reviews), len(hosts_with_reviews)*100/len(hosts)))
 
-    #Get Guests
+    # Host hostTrips
+    host_trips = get_hosts_trips(engine, host_ids)
+    print('Retrieved %d Manhattan host trips' % len(host_trips))
+
+    #Get Host Reviews
     guest_ids = set(reviews['reviewer_id'])
+    host_reviews = get_host_reviews(engine)
+    print('Retrieved %d reviews from hosts who have hosted Manhattan Guests' % len(host_reviews))
     print('Total Number of %d guests that have reviewed Manhattan listings' % len(guest_ids))
 
     guests = get_guests(engine)
     man_guests = guests[guests['id'].isin(guest_ids)]
     print('Retrieved %d (%.2f%%) guests that have reviewed Manhattan listings' % (len(man_guests), len(man_guests)*100/len(guest_ids)))
 
-    return (listings, reviews, hosts, man_guests)
+    return (listings, reviews, hosts, man_guests, host_trips, host_reviews)

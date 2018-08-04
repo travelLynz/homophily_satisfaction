@@ -33,7 +33,7 @@ def get_sentence_level_sent(out_dir, table):
         dic[i] = {}
     for i, r in df.iterrows():
         dic[r['id']][r['num_of_sent']] = r['s140']
-    return [utils.dic_to_list(dic[str(i)]) for i in table['id']]
+    return [utils.dic_to_list(dic[str(i)], table['num_of_sents']) for i in table['id']]
     # dic_scores = {}
     # for i in df['id'].unique():
     #     dic_scores[i] = []

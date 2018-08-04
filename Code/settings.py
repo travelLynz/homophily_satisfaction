@@ -47,8 +47,12 @@ DATA_DIR = get_dir('../Data/')
 SCRAPER_DIR = get_dir('/Users/lynraybarends/eclipse-workspace/airbnb-info-host')
 RAW_DATA_DIR = os.path.join('..', DATA_DIR, 'raw')
 RAW_GUESTS_DIR = os.path.join(RAW_DATA_DIR, 'guests')
+RAW_HOST_HOSTS_DIR = os.path.join(RAW_DATA_DIR, 'hostshosts')
+RAW_HOST_REVIEWS_DIR = os.path.join(RAW_DATA_DIR, 'hostguestreviews')
 RAW_LISTINGS_DIR = os.path.join(RAW_DATA_DIR, 'listings.csv')
 RAW_REVIEWS_DIR = os.path.join(RAW_DATA_DIR, 'reviews.csv')
+COGNITIVE_KEY = '206cefa4e6904d1586c2e5583316c27c'
+SIGHTCORP_KEY = 'cc5dd55921a64f2e822c677c8d1b727b'
 
 # coll
 listing_cols = [ 'id', 'host_id', 'name', 'summary', 'space','description','neighborhood_overview','notes',
@@ -159,6 +163,7 @@ TABLES = {
             id varchar(200) NOT NULL ,\
             name varchar(200) DEFAULT NULL ,\
             city varchar(200) DEFAULT NULL ,\
+            ccode varchar(3) DEFAULT NULL ,\
             membershipMonth varchar(20) DEFAULT NULL ,\
             membershipYear varchar(4) DEFAULT NULL ,\
             superhost varchar(5) DEFAULT NULL ,\
@@ -173,9 +178,21 @@ TABLES = {
             wishListNumber int(200) DEFAULT NULL,\
             PRIMARY KEY (idGuest)\
         ) ENGINE=InnoDB AUTO_INCREMENT=0"),
-    'reviews': (
-        "CREATE TABLE reviews (\
-            idReview int(11) NOT NULL AUTO_INCREMENT,\
+    'hostTrips': (
+        "CREATE TABLE hostTrips (\
+            idHostTrip int(11) NOT NULL AUTO_INCREMENT,\
+            hostId varchar(200) NOT NULL ,\
+            visited varchar(500) DEFAULT NULL ,\
+            min_times int(100) DEFAULT NULL ,\
+            city varchar(200) DEFAULT NULL ,\
+            ccode varchar(3) DEFAULT NULL ,\
+            country varchar(200) DEFAULT NULL ,\
+            state varchar(50) DEFAULT NULL ,\
+            PRIMARY KEY (idHostTrip)\
+        ) ENGINE=InnoDB AUTO_INCREMENT=0"),
+    'guestReviews': (
+        "CREATE TABLE guestReviews (\
+            idGuestReview int(11) NOT NULL AUTO_INCREMENT,\
             id varchar(45) NOT NULL ,\
             date varchar(200) DEFAULT NULL,\
             reviewer_id varchar(45) DEFAULT NULL,\
@@ -183,9 +200,22 @@ TABLES = {
             recipient_id varchar(45) DEFAULT NULL,\
             comments text(10000) DEFAULT NULL,\
             hostCancelled varchar(1) DEFAULT NULL,\
-            PRIMARY KEY (idReview),\
+            PRIMARY KEY (idGuestReview),\
             KEY secondary (reviewer_id),\
             KEY third (id)\
+        ) ENGINE=InnoDB AUTO_INCREMENT=0"),
+    'hostReviews': (
+        "CREATE TABLE hostReviews (\
+            idHostReview int(11) NOT NULL AUTO_INCREMENT,\
+            month varchar(200) DEFAULT NULL ,\
+            year varchar(200) DEFAULT NULL ,\
+            host_name varchar(200) DEFAULT NULL ,\
+            reviewer_id varchar(45) DEFAULT NULL,\
+            recipient_id varchar(45) DEFAULT NULL,\
+            comments text(10000) DEFAULT NULL,\
+            total_host_reviews text(10000) DEFAULT NULL,\
+            PRIMARY KEY (idHostReview),\
+            KEY secondary (reviewer_id)\
         ) ENGINE=InnoDB AUTO_INCREMENT=0")
     }
 
@@ -202,4 +232,64 @@ months_translated = {
     'novembre': 'November',
     'ottobre': 'October',
     'settembre': 'September'
+}
+
+states = {
+        'Alaska',
+        'Alabama',
+        'Arkansas',
+        'American Samoa',
+        'Arizona',
+        'California',
+        'Colorado',
+        'Connecticut',
+        'District of Columbia',
+        'Delaware',
+        'Florida',
+        'Georgia',
+        'Guam',
+        'Hawaii',
+        'Iowa',
+        'Idaho',
+        'Illinois',
+        'Indiana',
+        'Kansas',
+        'Kentucky',
+        'Louisiana',
+        'Massachusetts',
+        'Maryland',
+        'Maine',
+        'Michigan',
+        'Minnesota',
+        'Missouri',
+        'Northern Mariana Islands',
+        'Mississippi',
+        'Montana',
+        'National',
+        'North Carolina',
+        'North Dakota',
+        'Nebraska',
+        'New Hampshire',
+        'New Jersey',
+        'New Mexico',
+        'Nevada',
+        'New York',
+        'Ohio',
+        'Oklahoma',
+        'Oregon',
+        'Pennsylvania',
+        'Puerto Rico',
+        'Rhode Island',
+        'South Carolina',
+        'South Dakota',
+        'Tennessee',
+        'Texas',
+        'Utah',
+        'Virginia',
+        'Virgin Islands',
+        'Vermont',
+        'Washington',
+        'Wisconsin',
+        'West Virginia',
+        'Wyoming'
 }

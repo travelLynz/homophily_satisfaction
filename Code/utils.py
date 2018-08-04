@@ -95,8 +95,10 @@ def print_summary(col, kde=True):
 def minmaxscale(vals):
     return (vals - np.min(vals))/(np.max(vals) - np.min(vals))
 
-def minmaxscale_sent(tbl, col):
+def minmaxscale_sent(tbl, col, isString=False):
     val_set = set([])
+    if isString:
+        tbl[col] = tbl[col].map(lambda x : np.array(x.replace('[', '').replace(']', '').split(", ")).astype(np.float) if type(x) == str else [x])
     for i in tbl[col]:
         val_set = val_set.union(set(i))
 
@@ -110,6 +112,29 @@ def minmaxscale_sent(tbl, col):
         vals.append(row_vals)
     return vals
 
+
+# def minmaxscale_sent(tbl, col, isString=False):
+#     val_set = set([])
+#     if isString:
+#         for i in tbl[col]:
+#             val_set = val_set.union(i.replace('[', '').replace(']', '').split(", "))
+#         min = np.min([float(i) for i in val_set])
+#         max = np.max([float(i) for i in val_set])
+#         print(val_set)
+#     else:
+#         for i in tbl[col]:
+#             val_set = val_set.union(set(i))
+#         min = np.min(list(val_set))
+#         max = np.max(list(val_set))
+#     vals = []
+#     for r in tbl[col]:
+#         row_vals = []
+#         i
+#         for v in r:
+#             row_vals.append(format((float(v)-min)/(max - min), ".3f"))
+#         vals.append(row_vals)
+#     return vals
+
 def to_float(a):
     return [float(i) for i in a ]
 
@@ -121,6 +146,17 @@ def clip_outliers(x, low, high):
     else:
         return x
 
+def clip_outliers_sent(x, low, high):
+    vals = []
+    for i in x:
+        if i < low:
+            vals.append(low)
+        elif i> high:
+            vals.append(high)
+        else:
+            vals.append(i)
+    return vals
+
 def get_new_minmax(vals, fence_type="inner"):
     q1 = np.percentile(vals, 25)
     q3 = np.percentile(vals, 75)
@@ -130,16 +166,39 @@ def get_new_minmax(vals, fence_type="inner"):
     max = q3 + margin
     return (min, max)
 
-def create_normalised_table(src_tbl, tool, transform=False):
+def get_new_minmax_sent(vals, fence_type="inner"):
+    new_vals = [j for i in vals for j in i]
+    q1 = np.percentile(new_vals, 25)
+    q3 = np.percentile(new_vals, 75)
+    iqr = q3 - q1
+    margin = iqr*1.5 if fence_type == 'inner' else iqr*3
+    min = q1 - margin
+    max = q3 + margin
+    return (min, max)
+
+def create_normalised_table(src_tbl, tool, transform=None):
     new_tbl = src_tbl[['id', 'comments', tool]]
     new_tbl.is_copy = False
 
     new_tbl[tool + '-norm'] = minmaxscale(new_tbl[tool])
 
-    if transform:
-            new_tbl['trans_'+tool] = 2**new_tbl[tool]
-            new_tbl['trans_'+tool+'_norm'] = minmaxscale(new_tbl['trans_' + tool])
-            tool = 'trans_'+tool
+    if transform != None:
+        if transform == 'exp':
+            new_tbl['trans_'+tool] = 2**new_tbl[tool + '-norm']
+        elif transform == 'log':
+            new_tbl['trans_'+tool] = np.log(new_tbl[tool + '-norm']+1)
+        elif transform == 'log10':
+            new_tbl['trans_'+tool] = np.log10(new_tbl[tool + '-norm']+1)
+        elif transform == 'sqrt':
+            new_tbl['trans_'+tool] = np.sqrt(new_tbl[tool + '-norm'])
+        elif transform == 'pwr':
+            new_tbl['trans_'+tool] = new_tbl[tool + '-norm']**2
+        elif transform == 'multi':
+            new_tbl['trans_'+tool] = (new_tbl[tool + '-norm'])*2
+        elif transform == 'arcsin':
+            new_tbl['trans_'+tool] = np.arcsin(new_tbl[tool + '-norm'])
+        new_tbl['trans_'+tool+'_norm'] = minmaxscale(new_tbl['trans_' + tool])
+        tool = 'trans_'+tool
 
     inner_min, inner_max = get_new_minmax(new_tbl[tool])
     outer_min, outer_max = get_new_minmax(new_tbl[tool], "outer")
@@ -150,5 +209,67 @@ def create_normalised_table(src_tbl, tool, transform=False):
     new_tbl[tool + '-adj-2-norm'] = minmaxscale(new_tbl[tool + '-adj-2'])
     return new_tbl
 
-def dic_to_list(dic):
-    return [dic[str(i)] for i in range(len(dic))]
+def transform_sent(tbl, col, transform="log"):
+    vals = []
+    if transform == 'exp':
+        for i, r in tbl.iterrows():
+            vals.append([2**float(v) for v in r[col]])
+    elif transform == 'log':
+        for i, r in tbl.iterrows():
+            vals.append([np.log(float(v)+ 1) for v in r[col]])
+    elif transform == 'log10':
+        for i, r in tbl.iterrows():
+            vals.append([np.log10(float(v)+1) for v in r[col]])
+    elif transform == 'sqrt':
+        for i, r in tbl.iterrows():
+            vals.append([np.sqrt(float(v)) for v in r[col]])
+    elif transform == 'pwr':
+        for i, r in tbl.iterrows():
+            vals.append([float(v)**2 for v in r[col]])
+    elif transform == 'multi':
+        for i, r in tbl.iterrows():
+            vals.append([float(v)*2 for v in r[col]])
+    elif transform == 'arcsin':
+        for i, r in tbl.iterrows():
+            vals.append([np.arcsin(float(v)) for v in r[col]])
+    return vals
+
+def create_normalised_sent_table(src_tbl, tool, transform=None):
+    new_tbl = src_tbl[['id', 'comments', tool]]
+    new_tbl.is_copy = False
+
+    new_tbl[tool + '-norm'] = minmaxscale_sent(new_tbl,tool, True)
+
+    if transform != None:
+        new_tbl['trans_'+tool] = transform_sent(new_tbl, tool + '-norm', transform)
+        new_tbl['trans_'+tool+'_norm'] = minmaxscale_sent(new_tbl, 'trans_' + tool)
+        tool = 'trans_'+tool
+
+    inner_min, inner_max = get_new_minmax_sent(new_tbl[tool])
+    outer_min, outer_max = get_new_minmax_sent(new_tbl[tool], "outer")
+    new_tbl[tool + '-adj-1'] = [clip_outliers_sent(i, inner_min, inner_max) for i in new_tbl[tool]]
+    new_tbl[tool + '-adj-1-norm'] = minmaxscale_sent(new_tbl, tool + '-adj-1')
+    new_tbl[tool + '-adj-2'] = [clip_outliers_sent(i, outer_min, outer_max) for i in new_tbl[tool]]
+    new_tbl[tool + '-adj-2-norm'] = minmaxscale_sent(new_tbl, tool + '-adj-2')
+    return new_tbl
+
+def dic_to_list(dic, l):
+    if l != len(dic):
+        return np.nan
+    return [dic[str(i)] for i in range(l)]
+def str_to_list(x):
+    return np.array(x.replace('\'', '').replace('[', '').replace(']', '').split(", ")).astype(np.float)
+
+def flatten(lists, convert=True):
+    return [float(v) for l in lists for v in l] if convert else [v for l in lists for v in l]
+
+def hasNumbers(x):
+    return bool(re.search(r'\d', x))
+
+def invert_dict(d):
+    return dict([ (v, k) for k, v in d.items( ) ])
+
+def convert_to_str(ls):
+    return [str(i) if i != None else None for i in ls]
+
+ 

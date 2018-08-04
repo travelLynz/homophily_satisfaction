@@ -7,6 +7,7 @@ import time
 import numpy as np
 import os
 import pandas as pd
+import utils
 from nltk.tokenize import sent_tokenize
 import nltk.classify.textcat as tc
 
@@ -102,3 +103,41 @@ def detect_other_langs(com):
         except:
             continue;
     return (other_langs, "".join(sents)) if len(other_langs) > 0 else (0, None)
+
+def pipeline(reviews, stopwords=[], vocab=None):
+    reviews_encoded = {}
+    vocab_counts = {}
+    vocab_doc_count = {}
+
+    is_ext_vocab = True
+    if vocab is None:
+        is_ext_vocab = False
+        vocab = {'<OOV>': 0}
+    for key in reviews.keys():
+        r = []
+        tokenized_r = utils.tokenize(reviews[key].lower())
+        for token in tokenized_r:
+            #token = ps.stem(token)
+            if token in stopwords:
+                continue
+            if not is_ext_vocab and token not in vocab:
+                vocab[token] = len(vocab)
+                vocab_counts[token] = 1
+            if token not in vocab:
+                token_id = vocab['<OOV>']
+                vocab_counts['<OOV>'] += 1
+            else:
+                token_id = vocab[token]
+                vocab_counts[token] += 1
+            r.append(token_id)
+        reviews_encoded[key] = r
+    idf_dict = []
+    for key in vocab.keys():
+        if key in vocab_doc_count.keys():
+            idf_dict.append(np.log10(N/vocab_doc_count[key]))
+        else:
+            idf_dict.append(0)
+    return reviews_encoded, vocab_counts, vocab, idf_dict
+
+def create_vocab_count_table(counts):
+    return pd.DataFrame({'counts':[counts[k] for k in counts.keys()], 'word':[k for k in counts.keys()]})

@@ -3,7 +3,7 @@ import pandas as pd
 import glob
 import settings as s
 
-def readin_dir(path="", only_ext= None):
+def readin_dir(path="", only_ext= None, delimiter=','):
     results = None
     try:
         #get file paths
@@ -14,7 +14,7 @@ def readin_dir(path="", only_ext= None):
         o = []
         for f in out_files:
             print('Processing ', f)
-            o.append(pd.read_csv(f, header = None, engine='python'))
+            o.append(pd.read_csv(f, header = None, delimiter=delimiter, engine='python'))
         results = pd.concat(o)
         results = results.rename(columns=results.iloc[0]).drop(results.index[0]).reset_index(drop=True)
     except Exception as e:
@@ -43,10 +43,14 @@ def readin_file(path):
     print("Retrieving CSV file from ", path)
     return pd.read_csv(path)
 
-def save_all(prefix, guests, hosts, listings, reviews, guestIDs = None):
+def save_all(prefix, guests, hosts, listings, reviews, hostTrips=None, hostReviews=None, guestIDs = None):
     guests.to_csv(prefix + '_guests.csv')
     hosts.to_csv(prefix + '_hosts.csv')
     listings.to_csv(prefix + '_listings.csv')
     reviews.to_csv(prefix + '_reviews.csv')
+    if (hostTrips is not None):
+        hostTrips.to_csv(prefix + '_hostTrips.csv')
+    if (hostReviews is not None):
+        hostReviews.to_csv(prefix + '_hostReviews.csv')
     if (guestIDs is not None):
         pd.DataFrame({'id':list(guestIDs)}).to_csv(prefix + '_fullguestIDs.csv')
