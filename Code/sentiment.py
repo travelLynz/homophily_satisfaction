@@ -34,8 +34,8 @@ def analyse_review (text, scores, type=1):
 def reduce_to_average(col):
     vals = []
     for i in col:
-        reduced = [v for v in utils.to_float(i) if v <= 4.5 or v >= 5.5]
-        vals.append(format(np.average(reduced), ".3f"))
+        reduced = [v for v in utils.to_float(i) if v <= 0.45 or v >= 0.55]
+        vals.append(format(np.average(reduced), ".3f") if len(reduced) > 0 else 0.5)
     return vals
 
 def reduce_sentence_scores(table, tools, isString=False):

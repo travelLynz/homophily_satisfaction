@@ -4,3 +4,12 @@ Tools
 *.txt
 rich_output.json
 images.pyc
+*.jpg
+model.ckpt.data-00000-of-00001
+model.ckpt.index
+model.ckpt.meta
+projector_config.pbtxt
+notebooks/5/log
+*.ckpt
+*.out
+*.npy
