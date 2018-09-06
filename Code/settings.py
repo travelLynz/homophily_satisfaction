@@ -52,7 +52,11 @@ RAW_HOST_REVIEWS_DIR = os.path.join(RAW_DATA_DIR, 'hostguestreviews')
 RAW_LISTINGS_DIR = os.path.join(RAW_DATA_DIR, 'listings.csv')
 RAW_REVIEWS_DIR = os.path.join(RAW_DATA_DIR, 'reviews.csv')
 COGNITIVE_KEY = '206cefa4e6904d1586c2e5583316c27c'
-SIGHTCORP_KEY = 'cc5dd55921a64f2e822c677c8d1b727b'
+SIGHTCORP_KEY = '1a4fb409b7fa47c6b98602d114f74a1a'
+HOSTS_LAT_LNG = (38.0, -97.0)
+HOSTS_CCODE = 'US'
+HOSTS_REGION = 'Americas'
+HOSTS_SUBREGION = 'Northern America'
 
 # coll
 listing_cols = [ 'id', 'host_id', 'name', 'summary', 'space','description','neighborhood_overview','notes',
@@ -72,7 +76,8 @@ host_cols = [ 'host_id', 'host_name', 'host_since', 'host_location','host_about'
             'host_is_superhost', 'host_neighbourhood',
             'host_listings_count', 'host_total_listings_count', 'host_verifications',
             'host_has_profile_pic', 'host_identity_verified', 'calculated_host_listings_count']
-review_cols = ['listing_id', 'id', 'date', 'reviewer_id', 'comments']
+guestReview_cols = ['listing_id', 'id', 'date', 'reviewer_id', 'comments']
+hostReview_cols = ['recipient_id', 'reviewer_id', 'host_name', 'comments', 'total_host_reviews']
 
 TABLES = {
     'listings' : (
@@ -207,8 +212,6 @@ TABLES = {
     'hostReviews': (
         "CREATE TABLE hostReviews (\
             idHostReview int(11) NOT NULL AUTO_INCREMENT,\
-            month varchar(200) DEFAULT NULL ,\
-            year varchar(200) DEFAULT NULL ,\
             host_name varchar(200) DEFAULT NULL ,\
             reviewer_id varchar(45) DEFAULT NULL,\
             recipient_id varchar(45) DEFAULT NULL,\

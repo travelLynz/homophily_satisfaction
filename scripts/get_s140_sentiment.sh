@@ -7,7 +7,6 @@
 #     # out = $OUT_FILES + 'out_' + $f
 #     # print "curl --data-binary @" + $f + '"http://www.sentiment140.com/api/bulkClassify?query=accommodation" -o ' + $out
 #   done
-mdir = $1
 in_files=`ls $1/in/*.txt`
 out_dir=" $1/out/"
 for eachfile in $in_files

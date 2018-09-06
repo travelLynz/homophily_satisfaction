@@ -3,7 +3,7 @@ import pandas as pd
 import glob
 import settings as s
 
-def readin_dir(path="", only_ext= None, delimiter=','):
+def readin_dir(path="", only_ext= None, delimiter=',', index=None):
     results = None
     try:
         #get file paths
@@ -14,7 +14,7 @@ def readin_dir(path="", only_ext= None, delimiter=','):
         o = []
         for f in out_files:
             print('Processing ', f)
-            o.append(pd.read_csv(f, header = None, delimiter=delimiter, engine='python'))
+            o.append(pd.read_csv(f, header = None, delimiter=delimiter, engine='python', index_col=index))
         results = pd.concat(o)
         results = results.rename(columns=results.iloc[0]).drop(results.index[0]).reset_index(drop=True)
     except Exception as e:
@@ -41,7 +41,7 @@ def readin_guests(path=s.RAW_GUESTS_DIR):
 
 def readin_file(path):
     print("Retrieving CSV file from ", path)
-    return pd.read_csv(path)
+    return pd.read_csv(path, low_memory=False)
 
 def save_all(prefix, guests, hosts, listings, reviews, hostTrips=None, hostReviews=None, guestIDs = None):
     guests.to_csv(prefix + '_guests.csv')

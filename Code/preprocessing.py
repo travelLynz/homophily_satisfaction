@@ -5,6 +5,7 @@ import json
 import settings as s
 import pandas as pd
 import utils
+import numpy as np
 from nltk.tokenize import sent_tokenize
 from googletrans import Translator
 
@@ -33,6 +34,23 @@ def format_verified(x):
     v_list = list(filter(None,[s.strip() for s in x.split(',')]))
     return v_list+verified
 
+def clean_text(text, col):
+    print('Cleaning Text Data')
+
+    #Trim white spaces from column names
+    print('Trimming white spaces ')
+    text = text.applymap(lambda x: x.strip() if type(x) is str else str(x))
+
+    # Remove Line Breaks
+    print('Cleaning up Line Breaks')
+    text[col] = text[col].map(lambda x: x.replace("\r\n", " ").replace("\n", " ").replace("\r", " "))
+
+    # Remove Hidden Website Text
+    print('Cleaning up "(Website hidden by Airbnb)"')
+    text[col] = text[col].map(lambda x: x.replace("(Website hidden by Airbnb)", " "))
+
+    return text
+
 def clean_guests(guests):
     print('Cleaning Guest Data')
     print('Initial number of Guest records:', len(guests))
@@ -56,6 +74,7 @@ def clean_guests(guests):
     #Drop duplicates
     print("Drop duplicate records")
     guests = guests.drop_duplicates()
+    guests = guests.drop_duplicates(subset="id", keep="last")
     print('Updated number of guest records:', len(guests))
 
     #Clean up quotation marks
@@ -168,7 +187,7 @@ def get_listing_info(raw):
 def get_host_info(raw):
     print("Retrieving %d columns for hosts" % len(s.host_cols))
     hosts = raw[s.host_cols]
-    hosts = hosts.drop_duplicates(subset=None, inplace=False)
+    hosts = hosts.drop_duplicates(subset="host_id", keep="last", inplace=False)
     print("Number of NYC hosts: %d" % len(hosts))
 
     #Remove host_ from column names
@@ -178,8 +197,8 @@ def get_host_info(raw):
     return hosts
 
 def get_review_info(raw, listings):
-    print("Retrieving %d columns for reviews" % len(s.review_cols))
-    reviews = raw[s.review_cols]
+    print("Retrieving %d columns for reviews" % len(s.guestReview_cols))
+    reviews = raw[s.guestReview_cols]
     print("Number of NYC reviews: %d" % len(reviews))
 
     #Retrieving hostID from listing info"
@@ -419,13 +438,19 @@ def clean_host_reviews(reviews):
     reviews['comments'] = reviews['comments'].map(lambda x: x.replace("\r\n", " ").replace("\n", " ").replace("\r", " "))
 
     #
-    print('Removing records with NULL guest ids:', len(reviews[(reviews['guestId'] == 'null') & (reviews['guestId'].isnull())]), ' records')
-    reviews = reviews[(reviews['guestId'] != 'null') & (~reviews['guestId'].isnull())]
+    print('Removing records with NULL guest ids:', len(reviews[(reviews['recipient_id'] == 'null') & (reviews['recipient_id'].isnull())]), ' records')
+    reviews = reviews[(reviews['recipient_id'] != 'null') & (~reviews['recipient_id'].isnull())]
+    reviews = reviews[(~reviews['total_host_reviews'].isnull()) & (reviews['total_host_reviews'] != 'None') & (reviews['total_host_reviews'] != 'nan')]
     print('Updated number of host review records:', len(reviews))
 
     #
-    print('Removing records with NULL host ids:', len(reviews[(reviews['hostId'] == 'null') & (reviews['hostId'].isnull())]), ' records')
-    reviews = reviews[(reviews['hostId'] != 'null') & (~reviews['hostId'].isnull())]
+    print('Cleaning up Total Review column')
+    reviews['total_host_reviews'] = reviews['total_host_reviews'].map(lambda x : int(str(x).replace('=', '')))
+    print('Updated number of host review records:', len(reviews))
+
+    #
+    print('Removing records with NULL host ids:', len(reviews[(reviews['reviewer_id'] == 'null') & (reviews['reviewer_id'].isnull())]), ' records')
+    reviews = reviews[(reviews['reviewer_id'] != 'null') & (~reviews['reviewer_id'].isnull())]
     print('Updated number of host review records:', len(reviews))
 
     #Drop duplicates
@@ -434,30 +459,37 @@ def clean_host_reviews(reviews):
     print('Updated number of host review records:', len(reviews))
 
     print('Removing records with non-numeric guest ids:')
-    reviews = reviews[reviews.guestId.apply(lambda x: x.isnumeric())]
+    reviews = reviews[reviews.recipient_id.apply(lambda x: x.isnumeric())]
+    reviews = reviews[reviews['recipient_id'].astype(str).str.len() < 12]
     print('Updated number of host review records:', len(reviews))
+
+    reviews = reviews[s.hostReview_cols]
 
     return reviews
 
 def rename_host_review_cols(reviews):
-    return reviews.rename(columns={'hostName': 'host_name', 'totalReviewsFromHosts': 'total_host_reviews', 'guestId':'recipient_id', 'hostId': 'reviewer_id'})
+    mapping = {reviews.columns[0]:'recipient_id', reviews.columns[1]:'reviewer_id', reviews.columns[2]: 'host_name', reviews.columns[6]:'total_host_reviews'}
+    return reviews.rename(columns=mapping)
 
-def restrict_by_people_pic(pic_tbl, hosts, listings, reviews, guests):
-
-    # Reduced Hosts
-    new_host_ids = set(utils.convert_to_str(pic_tbl[pic_tbl['num_of_people_in_pic'] == 1]['id'].unique()))
+def restrict_by_people_pic(hpic_tbl, gpic_tbl, hosts, listings, reviews, guests):
 
     # Reduced Hosts
-    new_hosts = hosts[hosts['id'].isin(new_host_ids)]
+    new_host_ids = set(utils.convert_to_str(hpic_tbl[hpic_tbl['num_of_people_in_pic'] == 1]['id'].unique()))
+
+    # Reduced Guests
+    new_guest_ids = set(utils.convert_to_str(gpic_tbl[gpic_tbl['num_of_people'] == 1]['id'].unique()))
+
+    # Reduced Reviews
+    new_reviews = reviews[(reviews['recipient_id'].isin(new_host_ids)) & (reviews['reviewer_id'].isin(new_guest_ids))]
+    print("Revised number of Reviews: %d (decreased %.2f %%)" % (len(new_reviews), utils.get_decreased_percent(new_reviews, reviews)))
+
+    # Reduced Hosts
+    new_hosts = hosts[hosts['id'].isin(set(new_reviews['recipient_id']))]
     print("Revised number of Hosts: %d (decreased %.2f %%)" % (len(new_hosts), utils.get_decreased_percent(new_hosts, hosts)))
 
     # Reduced Listings
-    new_listings = listings[listings['host_id'].isin(new_host_ids)]
+    new_listings = listings[listings['id'].isin(set(new_reviews['listing_id']))]
     print("Revised number of Listings: %d (decreased %.2f %%)" % (len(new_listings), utils.get_decreased_percent(new_listings, listings)))
-
-    # Reduced Reviews
-    new_reviews = reviews[reviews['recipient_id'].isin(new_host_ids)]
-    print("Revised number of Reviews: %d (decreased %.2f %%)" % (len(new_reviews), utils.get_decreased_percent(new_reviews, reviews)))
 
     # Reduced Overall Guests
     overall_guests = reviews['reviewer_id'].unique()
@@ -474,15 +506,27 @@ def restrict_by_received_guests(hosts, listings, reviews, guests):
 
     # Reduced Reviews
     print('Restrict to only reviews from guests whose profile we have')
-    new_reviews = reviews[reviews['reviewer_id'].isin(guests['id'].unique())]
+    new_reviews = reviews[(reviews['reviewer_id'].isin(guests['id'].unique())) & (reviews['recipient_id'].isin(hosts['id'].unique()))]
     print("Revised number of Reviews: %d (decreased %.2f %%)" % (len(new_reviews), utils.get_decreased_percent(new_reviews, reviews)))
 
     # Reduced Hosts
     new_hosts = hosts[hosts['id'].isin(set(new_reviews['recipient_id'].astype(str)))]
     print("Revised number of Hosts: %d (decreased %.2f %%)" % (len(new_hosts), utils.get_decreased_percent(new_hosts, hosts)))
 
+    # Reduced Guests
+    new_guests = guests[guests['id'].isin(set(new_reviews['reviewer_id'].astype(str)))]
+    print("Revised number of Guests: %d (decreased %.2f %%)" % (len(new_guests), utils.get_decreased_percent(new_guests, guests)))
+
     # Reduced Listings
     new_listings = listings[listings['id'].isin(set(new_reviews['listing_id'].astype(str)))]
     print("Revised number of Listings: %d (decreased %.2f %%)" % (len(new_listings), utils.get_decreased_percent(new_listings, listings)))
 
-    return (new_hosts, new_listings, new_reviews)
+    return (new_hosts, new_guests, new_listings, new_reviews)
+
+def clean_host_to_guests_reviews(reviews):
+
+    print('Removing Erroneous Records')
+    hg_reviews = reviews[(~reviews['total_host_reviews'].isnull()) & (reviews['total_host_reviews'] != 'None')]
+    hg_reviews = hg_reviews[hg_reviews['recipient_id'].astype(str).str.len() < 12]
+    hg_reviews['total_host_reviews'] = hg_reviews['total_host_reviews'].map(lambda x : int(str(x).replace('=', '')))
+    return hg_reviews

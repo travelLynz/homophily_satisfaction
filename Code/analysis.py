@@ -5,6 +5,9 @@ import numpy as np
 import utils
 from collections import defaultdict
 import matplotlib.pyplot as plt
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import statsmodels.api as sm
+import seaborn as sns
 
 def rss(tbl, c1, c2):
     return np.sum([(float(r[c1]) - float(r[c2]))**2 for i, r in tbl.iterrows()])
@@ -14,27 +17,32 @@ def split_into_levels(in_tbl, out_tbl, col, type=1):
     out_tbl.is_copy = False
     if type == 1:
         for i, r in in_tbl.iterrows():
-            if (r[col]<=0.2):
+            val = float(r[col])
+            if (val<=0.2):
                 vals.append(1)
-            elif (r[col]>0.2 and r[col]<=0.4):
+            elif (val>0.2 and val<=0.4):
                 vals.append(2)
-            elif (r[col]>0.4 and r[col]<=0.6):
+            elif (val>0.4 and val<=0.6):
                 vals.append(3)
-            elif (r[col]>0.6 and r[col]<=0.8):
+            elif (val>0.6 and val<=0.8):
                 vals.append(4)
-            elif (r[col]>0.8):
+            elif (val>0.8):
                 vals.append(5)
     elif type == 2:
         for i, r in in_tbl.iterrows():
-            if (r[col]<=0.35):
+            val = float(r[col])
+            if (val<=0.35):
                 vals.append(1)
-            elif (r[col]>0.35 and r[col]<=0.65):
+            elif (val>0.35 and val<=0.65):
                 vals.append(2)
-            elif (r[col]>0.65):
+            elif (val>0.65):
                 vals.append(3)
     else:
         return none
-    out_tbl["level_" + col] = vals
+    if type == 1:
+        out_tbl["level5_" + col] = vals
+    else:
+        out_tbl["level3_" + col] = vals
     return out_tbl
 
 def build_levels_table(tbl, tools, type=1):
@@ -152,6 +160,8 @@ def plot_confusion_matrix_grid(tbl, true_label_col, guess_labels):
             c = c  + 1
         else:
             plt.show()
+        print(t)
+        display_html(full_evaluation_table(cm))
 
 def full_evaluation_table(confusion_matrix):
     """
@@ -180,3 +190,65 @@ def full_evaluation_table(confusion_matrix):
 
     result_table.append(("[All]", gold_counts["[All]"], guess_counts["[All]"], *evaluate(confusion_matrix)))
     return pd.DataFrame(result_table, columns=('Label', 'Gold', 'Guess', 'Precision', 'Recall', 'F1'))
+
+def get_dummies(data, nominal_columns):
+    dummy_df = pd.get_dummies(data[nominal_columns])
+    data = pd.concat([data, dummy_df], axis=1)
+    data = data.drop(nominal_columns, axis=1)
+    return data
+
+def print_coeffcorr(X):
+
+    ## Correlation confusion matrix
+    corr = X.corr()
+    sns.heatmap(corr,
+            xticklabels=corr.columns.values,
+            yticklabels=corr.columns.values)
+    plt.show()
+
+    # Correlation matrix with values
+    display_html(X.corr().style.background_gradient())
+
+
+def analyse_features(X, Y, thresh=10):
+
+    print_coeffcorr(X)
+
+    # Run VIF
+    X = calculate_vif_(X, thresh)
+
+    run_regression(X, Y)
+
+def calculate_vif_(X, thresh=10):
+    cols = X.columns
+    variables = np.arange(X.shape[1])
+    dropped=True
+    while dropped:
+        dropped=False
+        c = X[cols[variables]].values
+        vif = [variance_inflation_factor(c, ix) for ix in np.arange(c.shape[1])]
+        print (pd.DataFrame({"vif": vif, "cols":cols[variables] }))
+        maxloc = vif.index(max(vif))
+        if max(vif) > thresh:
+            print('dropping \'' + X[cols[variables]].columns[maxloc] + '\' at index: ' + str(maxloc))
+            variables = np.delete(variables, maxloc)
+            dropped=True
+
+    print('Remaining variables:')
+    print(X.columns[variables])
+    return X[cols[variables]]
+
+def run_regression(X, y):
+    model = sm.OLS(y, X).fit()
+    predictions = model.predict(X)
+    print(model.summary())
+
+def test_features(X, Y, nominal_features=None, vif_thresh=10):
+
+    #data_Y_sat = data_X.join(Y[['id','satisfaction']] .set_index('id'), on='id').dropna()
+    #data_Y_rel_sat = data_X.join(Y[['id','relative_satisfaction']] .set_index('id'), on='id').dropna()
+
+    feature_labels = set(X.columns)
+
+    analyse_features(X, Y, vif_thresh)
+    #analyse_features(X, [data_Y_sat['satisfaction'], data_Y_rel_sat['relative_satisfaction']], vif_thresh)

@@ -61,11 +61,11 @@ def get_city_info(vals, countries):
   return (country, ccode, city, state)
 
 def add_additional_c_matches(countries):
-    countries["Russia"] = "RUS"
+    countries["Russia"] = "RU"
     countries["Vietnam"] = "VN"
     countries["South Korea"] = "KR"
-    countries["UK"] = "UK"
-    countries["USA"] = "USA"
+    countries["UK"] = "GB"
+    countries["USA"] = "US"
     countries["US Virgin Islands"] = "VI"
     countries["Hong-Kong"] = "HK"
     countries["Dutch Caribbean"] = "BQ"

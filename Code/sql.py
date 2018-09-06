@@ -105,6 +105,7 @@ def get_manhattan_data():
     #Get Hosts
     host_ids = set(listings['host_id'])
     hosts = get_hosts(engine, host_ids)
+    hosts = hosts[~hosts['id'].isnull()]
     print('Retrieved %d Manhattan hosts' % len(hosts))
     hosts_with_reviews = reviews['recipient_id'].unique()
     print('Retrieved only %d (%.2f%%) Manhattan hosts with reviews' % (len(hosts_with_reviews), len(hosts_with_reviews)*100/len(hosts)))
@@ -121,6 +122,7 @@ def get_manhattan_data():
 
     guests = get_guests(engine)
     man_guests = guests[guests['id'].isin(guest_ids)]
+    man_guests = man_guests.drop_duplicates(subset="id", keep="last").reset_index(drop=True)
     print('Retrieved %d (%.2f%%) guests that have reviewed Manhattan listings' % (len(man_guests), len(man_guests)*100/len(guest_ids)))
 
     return (listings, reviews, hosts, man_guests, host_trips, host_reviews)

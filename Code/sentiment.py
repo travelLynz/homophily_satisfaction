@@ -34,8 +34,15 @@ def analyse_review (text, scores, type=1):
 def reduce_to_average(col):
     vals = []
     for i in col:
-        reduced = [v for v in utils.to_float(i) if v <= 0.45 or v >= 0.55]
+        reduced = [v for v in utils.to_float(i) ]
         vals.append(format(np.average(reduced), ".3f") if len(reduced) > 0 else 0.5)
+    return vals
+
+def remove_neutral(col, nval):
+    vals = []
+    for i in col:
+        reduced = [v for v in utils.to_float(i) if v != nval]
+        vals.append(format(np.average(reduced), ".3f") if len(reduced) > 0 else nval)
     return vals
 
 def reduce_sentence_scores(table, tools, isString=False):
@@ -44,6 +51,14 @@ def reduce_sentence_scores(table, tools, isString=False):
         if isString:
             table[t] = table[t].map(lambda x : np.array(x.replace('\'', '').replace('[', '').replace(']', '').split(", ")).astype(np.float))
         table[t] = reduce_to_average(table[t])
+    return table
+
+def reduce_to_scores(table, tools , nvals, isString=False):
+    table.is_copy = False
+    for t in tools:
+        if isString:
+            table[t] = table[t].map(lambda x : np.array(x.replace('\'', '').replace('[', '').replace(']', '').split(", ")).astype(np.float))
+        table[t] = remove_neutral(table[t], nvals[t])
     return table
 
 def print_anaysis(tbl, id, scoring, type=1):
