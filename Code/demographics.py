@@ -1,6 +1,6 @@
-def isSameGender(g):
-    genders = g.split('-')
-    if genders[0] == genders[1]:
+def isSame(field):
+    fields = field.split('-')
+    if fields[0] == fields[1]:
         return 1
     else:
         return 0

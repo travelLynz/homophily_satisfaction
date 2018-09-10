@@ -167,7 +167,7 @@ def pipeline(data, col, stopwords=[], vocab=None):
         doc_vocab = set()
         tokenized_r = utils.tokenize(d[col])
         for token in tokenized_r:
-            #token = ps.stem(token)
+            token = ps.stem(token)
             if token.lower() in stopwords:
                 continue
             if not is_ext_vocab and token not in vocab:
