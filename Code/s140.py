@@ -35,13 +35,7 @@ def get_sentence_level_sent(out_dir, table, review_type='guest'):
     for i, r in df.iterrows():
         dic[r['id']][r['num_of_sent']] = r['s140']
     return [utils.dic_to_list(dic[str(r['id'])]) for i, r in table.iterrows()] if review_type=='guest' else [utils.dic_to_list(dic[str(r['idHostReview'])]) for i, r in table.iterrows()] 
-    # dic_scores = {}
-    # for i in df['id'].unique():
-    #     dic_scores[i] = []
-    #     for _,r in df[df['id'] == i].sort_values(by='num_of_sent').iterrows():
-    #         dic_scores[i].append(int(r['s140']))
-    # return [dic_scores[str(r['id'])] for i, r in table.iterrows()]
-
+    
 def save_review_s140(revset, name, path="", review_type='guest'):
     for n, data in zip(range(40),np.array_split(revset, 40)):
         din = os.path.join(path, 's140', "overall","in", name + '_' + str(n) + '.txt')

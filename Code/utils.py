@@ -120,28 +120,6 @@ def minmaxscale_sent(tbl, col, isString=False):
     return vals
 
 
-# def minmaxscale_sent(tbl, col, isString=False):
-#     val_set = set([])
-#     if isString:
-#         for i in tbl[col]:
-#             val_set = val_set.union(i.replace('[', '').replace(']', '').split(", "))
-#         min = np.min([float(i) for i in val_set])
-#         max = np.max([float(i) for i in val_set])
-#         print(val_set)
-#     else:
-#         for i in tbl[col]:
-#             val_set = val_set.union(set(i))
-#         min = np.min(list(val_set))
-#         max = np.max(list(val_set))
-#     vals = []
-#     for r in tbl[col]:
-#         row_vals = []
-#         i
-#         for v in r:
-#             row_vals.append(format((float(v)-min)/(max - min), ".3f"))
-#         vals.append(row_vals)
-#     return vals
-
 def to_float(a):
     return [float(i) for i in a ]
 

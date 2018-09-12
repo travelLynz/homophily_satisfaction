@@ -1,0 +1,14 @@
+AIRBNB DATA 
+=====================================================================================
+This data is in order to supplement the research done on Similarity and Satisfaction 
+
+The folders have been separated to make things a bit easie when downloadong.
+
+hosts_imgs.zip      ------- All the Host Images collected during the project 
+pics_needed_cropping ------- When a picture was required to be cropped this is where you will find cropped versions
+raw.zip              ------- This is where you will find the raw data collected from Airbnb (guest profiles, host reviews etc)
+notebooks            ------- files associated/ created while using notebooks as in the git project
+guests_imgs.zip     ------- All the Guest Images collected during the project
+
+
+Project location is at https://github.com/travelLynz/homophily_satisfaction
